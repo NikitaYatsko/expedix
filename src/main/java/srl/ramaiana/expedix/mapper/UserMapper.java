@@ -1,8 +1,9 @@
 package srl.ramaiana.expedix.mapper;
 
 import org.springframework.stereotype.Component;
-import srl.ramaiana.expedix.entity.User;
-import srl.ramaiana.expedix.entity.dto.UserDTO;
+import srl.ramaiana.expedix.model.entity.User;
+import srl.ramaiana.expedix.model.dto.UserDTO;
+
 @Component
 public class UserMapper {
     public UserDTO toDto(User user) {

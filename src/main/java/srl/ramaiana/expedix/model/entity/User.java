@@ -1,7 +1,7 @@
-package srl.ramaiana.expedix.entity;
+package srl.ramaiana.expedix.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 
@@ -14,11 +14,15 @@ public class User {
     @Column(name = "id")
     private Long id;
     @Column(name = "personal_code")
+    @NotBlank
     private String personalCode;
     @Column(name = "full_name")
+    @NotBlank
     private String fullName;
     @Column(name = "phone")
+    @NotBlank
     private String phoneNumber;
     @Column(name = "email")
+    @NotBlank
     private String email;
 }

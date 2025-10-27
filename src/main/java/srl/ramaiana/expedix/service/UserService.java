@@ -1,7 +1,8 @@
 package srl.ramaiana.expedix.service;
 
-import srl.ramaiana.expedix.entity.dto.UserDTO;
+import jakarta.validation.constraints.NotNull;
+import srl.ramaiana.expedix.model.dto.UserDTO;
 
 public interface UserService {
-    UserDTO findUserById(Integer userId);
+    UserDTO findUserById(@NotNull Integer userId);
 }

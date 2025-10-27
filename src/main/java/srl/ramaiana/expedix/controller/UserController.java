@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import srl.ramaiana.expedix.entity.dto.UserDTO;
+import srl.ramaiana.expedix.model.dto.UserDTO;
 import srl.ramaiana.expedix.service.UserService;
 
 @Slf4j

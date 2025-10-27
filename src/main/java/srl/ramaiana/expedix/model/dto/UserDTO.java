@@ -1,4 +1,4 @@
-package srl.ramaiana.expedix.entity.dto;
+package srl.ramaiana.expedix.model.dto;
 
 
 import lombok.Data;
