@@ -1,0 +1,35 @@
+
+services:
+  postgres-new:
+    image: postgres:16
+    container_name: expedixdb_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5444:5432"
+    volumes:
+      - pgdata_new:/var/lib/postgresql/data
+    networks:
+      - backend_network
+
+  pgadmin-new:
+    image: dpage/pgadmin4:8
+    container_name: expedixpg
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8083:80"
+    depends_on:
+      - postgres-new
+    networks:
+      - backend_network
+
+volumes:
+  pgdata_new:
+
+networks:
+  backend_network:
+    driver: bridge
