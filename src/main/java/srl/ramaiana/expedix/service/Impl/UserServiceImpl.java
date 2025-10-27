@@ -1,0 +1,25 @@
+package srl.ramaiana.expedix.service.Impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.entity.User;
+import srl.ramaiana.expedix.entity.dto.UserDTO;
+import srl.ramaiana.expedix.exceptions.UserNotFoundException;
+import srl.ramaiana.expedix.mapper.UserMapper;
+import srl.ramaiana.expedix.repository.UserRepository;
+import srl.ramaiana.expedix.service.UserService;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+
+    @Override
+    public UserDTO findUserById(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundException("User not found!")
+        );
+        return userMapper.toDto(user);
+    }
+}
