@@ -30,4 +30,15 @@ public class ShopServiceImpl implements ShopService {
         shopRepository.save(shop);
         return shopMapper.toDto(shop);
     }
+
+
+    @Override
+    public ShopDTO updateShopById(@NotNull Integer shopId, @NotNull ShopRequest shopRequest) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(
+                () -> new RuntimeException("Shop not found"));
+        shop.setAddress(shopRequest.getAddress());
+        shop.setName(shopRequest.getName());
+        shopRepository.save(shop);
+        return shopMapper.toDto(shop);
+    }
 }

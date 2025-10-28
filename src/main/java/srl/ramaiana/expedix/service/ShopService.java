@@ -9,4 +9,5 @@ public interface ShopService {
     ShopDTO getShopById(@NotNull Integer shopId);
 
     ShopDTO createShop(@NotNull ShopRequest shopRequest);
+    ShopDTO updateShopById(@NotNull Integer shopId, @NotNull ShopRequest shopRequest);
 }

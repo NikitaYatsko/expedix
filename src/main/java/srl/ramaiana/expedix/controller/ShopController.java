@@ -28,5 +28,12 @@ public class ShopController {
         return ResponseEntity.ok(shopService.createShop(shopRequest));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ShopDTO> updateShop(@RequestBody ShopRequest shopRequest, @PathVariable Integer id) {
+        log.info("Requesting update shop {}", shopRequest);
+        shopService.updateShopById(id, shopRequest);
+        return ResponseEntity.ok(shopService.getShopById(id));
+    }
+
 
 }
