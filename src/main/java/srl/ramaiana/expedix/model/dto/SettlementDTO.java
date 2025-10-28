@@ -1,0 +1,12 @@
+package srl.ramaiana.expedix.model.dto;
+
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+public class SettlementDTO {
+    private Integer id;
+    private String name;
+    private List<ShopDTO> shopList;
+}

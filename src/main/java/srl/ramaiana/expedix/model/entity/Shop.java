@@ -17,4 +17,5 @@ public class Shop {
     @NotBlank
     @Column(name = "address")
     private String address;
+
 }

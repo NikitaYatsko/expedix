@@ -13,10 +13,10 @@ import srl.ramaiana.expedix.service.UserService;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
 
+    private final UserService userService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Integer id) {

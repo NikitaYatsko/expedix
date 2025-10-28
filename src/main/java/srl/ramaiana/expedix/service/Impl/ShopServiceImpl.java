@@ -1,0 +1,33 @@
+package srl.ramaiana.expedix.service.Impl;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.mapper.ShopMapper;
+import srl.ramaiana.expedix.model.dto.ShopDTO;
+import srl.ramaiana.expedix.model.entity.Shop;
+import srl.ramaiana.expedix.model.request.ShopRequest;
+import srl.ramaiana.expedix.repository.ShopRepository;
+import srl.ramaiana.expedix.service.ShopService;
+
+@RequiredArgsConstructor
+@Service
+public class ShopServiceImpl implements ShopService {
+
+    private final ShopRepository shopRepository;
+    private final ShopMapper shopMapper;
+
+    @Override
+    public ShopDTO getShopById(@NotNull Integer shopId) {
+        Shop shop = shopRepository.findById(shopId).orElseThrow(
+                () -> new RuntimeException("Shop not found"));
+        return shopMapper.toDto(shop);
+    }
+
+    @Override
+    public ShopDTO createShop(@NotNull ShopRequest shopRequest) {
+        Shop shop = shopMapper.toEntity(shopRequest);
+        shopRepository.save(shop);
+        return shopMapper.toDto(shop);
+    }
+}

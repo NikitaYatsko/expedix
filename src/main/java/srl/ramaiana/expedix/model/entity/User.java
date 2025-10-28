@@ -3,6 +3,9 @@ package srl.ramaiana.expedix.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import srl.ramaiana.expedix.model.dto.SettlementDTO;
+
+import java.util.List;
 
 
 @Data
@@ -25,4 +28,6 @@ public class User {
     @Column(name = "email")
     @NotBlank
     private String email;
+    @OneToMany
+    private List<Settlement> settlementList;
 }

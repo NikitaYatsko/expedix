@@ -1,0 +1,32 @@
+package srl.ramaiana.expedix.controller;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import srl.ramaiana.expedix.model.dto.ShopDTO;
+import srl.ramaiana.expedix.model.request.ShopRequest;
+import srl.ramaiana.expedix.service.ShopService;
+
+@Slf4j
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/shops")
+public class ShopController {
+
+    private final ShopService shopService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ShopDTO> getShopById(@PathVariable Integer id) {
+        log.info("Getting shop by id {}", id);
+        return ResponseEntity.ok(shopService.getShopById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<ShopDTO> createShop(@RequestBody ShopRequest shopRequest) {
+        log.info("Requesting create shop {}", shopRequest);
+        return ResponseEntity.ok(shopService.createShop(shopRequest));
+    }
+
+
+}
