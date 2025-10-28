@@ -10,4 +10,5 @@ public interface ShopService {
 
     ShopDTO createShop(@NotNull ShopRequest shopRequest);
     ShopDTO updateShopById(@NotNull Integer shopId, @NotNull ShopRequest shopRequest);
+    void deleteShopById(@NotNull Integer shopId);
 }

@@ -35,5 +35,12 @@ public class ShopController {
         return ResponseEntity.ok(shopService.getShopById(id));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeShop(@PathVariable Integer id) {
+        log.info("Removing shop {}", id);
+        shopService.deleteShopById(id);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
