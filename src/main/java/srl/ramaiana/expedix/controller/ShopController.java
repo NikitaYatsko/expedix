@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,13 @@ public class ShopController {
     }
 
     @PostMapping
-    public ResponseEntity<ShopDTO> createShop(@RequestBody ShopRequest shopRequest) {
+    public ResponseEntity<ShopDTO> createShop(@RequestBody @Valid ShopRequest shopRequest) {
         log.info("Requesting create shop {}", shopRequest);
         return ResponseEntity.ok(shopService.createShop(shopRequest));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ShopDTO> updateShop(@RequestBody ShopRequest shopRequest, @PathVariable Integer id) {
+    public ResponseEntity<ShopDTO> updateShop(@RequestBody @Valid ShopRequest shopRequest, @PathVariable Integer id) {
         log.info("Requesting update shop {}", shopRequest);
         shopService.updateShopById(id, shopRequest);
         return ResponseEntity.ok(shopService.getShopById(id));

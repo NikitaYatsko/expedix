@@ -3,10 +3,12 @@ package srl.ramaiana.expedix.service.Impl;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
+import srl.ramaiana.expedix.model.request.NewUserRequest;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
@@ -21,6 +23,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found!")
         );
+        return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserDTO createUser(NewUserRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new DataExistsException("Email already exists!");
+        }
+        User user = userMapper.toEntity(request);
+        userRepository.save(user);
         return userMapper.toDto(user);
     }
 }

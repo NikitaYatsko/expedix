@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.UserDTO;
+import srl.ramaiana.expedix.model.request.NewUserRequest;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -27,5 +30,19 @@ public class UserMapper {
                 .stream()
                 .map(settlementMapper::toDto).toList());
         return userDTO;
+    }
+
+    public User toEntity(NewUserRequest request) {
+        if (request == null) {
+            return null;
+        }
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setFullName(request.getFullName());
+        user.setPassword(request.getPassword());
+        user.setPhoneNumber(request.getPhone());
+        user.setPersonalCode(null);
+        user.setSettlementList(List.of());
+        return user;
     }
 }

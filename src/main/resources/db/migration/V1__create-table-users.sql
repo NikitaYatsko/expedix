@@ -1,9 +1,10 @@
 CREATE TABLE expedix.users
 (
     id            SERIAL PRIMARY KEY,
-    personal_code VARCHAR(20)  NOT NULL UNIQUE,
+    personal_code VARCHAR(20)  UNIQUE,
     full_name     VARCHAR(100) NOT NULL,
-    phone         VARCHAR(20),
+    phone         VARCHAR(20)  not null unique,
+    password      varchar(80)  not null,
     email         VARCHAR(100)
 );
 create table expedix.settlements
@@ -17,5 +18,6 @@ create table expedix.shops
     id            SERIAL PRIMARY KEY,
     name          varchar(100) not null,
     address       varchar(100) not null,
-    settlement_id int references expedix.settlements(id)
+    is_deleted    boolean      not null default false,
+    settlement_id int references expedix.settlements (id)
 );

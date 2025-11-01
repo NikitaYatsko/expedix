@@ -2,8 +2,8 @@ package srl.ramaiana.expedix.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import srl.ramaiana.expedix.model.dto.SettlementDTO;
 
 import java.util.List;
 
@@ -17,11 +17,13 @@ public class User {
     @Column(name = "id")
     private Long id;
     @Column(name = "personal_code")
-    @NotBlank
     private String personalCode;
     @Column(name = "full_name")
     @NotBlank
     private String fullName;
+    @NotBlank
+    @Size(min = 6, max = 30)
+    private String password;
     @Column(name = "phone")
     @NotBlank
     private String phoneNumber;
