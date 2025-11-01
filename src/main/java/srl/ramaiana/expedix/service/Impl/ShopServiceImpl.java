@@ -3,7 +3,7 @@ package srl.ramaiana.expedix.service.Impl;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import srl.ramaiana.expedix.exceptions.ShopNotFoundException;
+import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.ShopMapper;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
 import srl.ramaiana.expedix.model.entity.Shop;
@@ -21,7 +21,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopDTO getShopById(@NotNull Integer shopId) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
-                () -> new ShopNotFoundException("Shop not found"));
+                () -> new DataNotFoundException("Shop not found"));
         return shopMapper.toDto(shop);
     }
 
@@ -36,7 +36,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopDTO updateShopById(@NotNull Integer shopId, @NotNull ShopRequest shopRequest) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
-                () -> new ShopNotFoundException("Shop not found"));
+                () -> new DataNotFoundException("Shop not found"));
         shop.setAddress(shopRequest.getAddress());
         shop.setName(shopRequest.getName());
         shopRepository.save(shop);
@@ -46,7 +46,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void deleteShopById(Integer shopId) {
         Shop shop = shopRepository.findById(shopId).orElseThrow(
-                () -> new ShopNotFoundException("Shop not found"));
+                () -> new DataNotFoundException("Shop not found"));
         shop.setIsDeleted(true);
         shopRepository.save(shop);
     }
