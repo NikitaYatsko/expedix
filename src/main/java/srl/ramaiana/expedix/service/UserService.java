@@ -9,4 +9,5 @@ public interface UserService {
     UserDTO findUserById(@NotNull Integer userId);
     UserDTO createUser(@NotNull NewUserRequest request);
     UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request);
+    void deleteUser(@NotNull Integer userId);
 }

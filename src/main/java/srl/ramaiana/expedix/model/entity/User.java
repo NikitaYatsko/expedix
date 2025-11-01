@@ -30,6 +30,9 @@ public class User {
     @Column(name = "email")
     @NotBlank
     private String email;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
     @OneToMany
     private List<Settlement> settlementList;
+
 }

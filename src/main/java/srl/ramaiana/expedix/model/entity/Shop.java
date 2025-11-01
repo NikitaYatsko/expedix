@@ -17,7 +17,7 @@ public class Shop {
     @NotBlank
     @Column(name = "address")
     private String address;
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
 }

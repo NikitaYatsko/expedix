@@ -45,7 +45,7 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public void deleteShopById(Integer shopId) {
-        Shop shop = shopRepository.findById(shopId).orElseThrow(
+        Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
                 () -> new DataNotFoundException("Shop not found"));
         shop.setIsDeleted(true);
         shopRepository.save(shop);

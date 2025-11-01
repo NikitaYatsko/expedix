@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findUserById(@NotNull Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow(
+        User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found!")
         );
         return userMapper.toDto(user);
@@ -39,12 +39,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(
+        User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found!")
         );
         userMapper.updateUserFromRequest(request, user);
         userRepository.save(user);
         return userMapper.toDto(user);
 
+    }
+
+    @Override
+    public void deleteUser(Integer userId) {
+        User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
+                () -> new DataNotFoundException("User not found!")
+        );
+        user.setIsDeleted(true);
+        userRepository.save(user);
     }
 }
