@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.UserDTO;
-import srl.ramaiana.expedix.model.request.NewUserRequest;
+import srl.ramaiana.expedix.model.request.user.NewUserRequest;
+import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.service.UserService;
 
 @Slf4j
@@ -26,5 +27,11 @@ public class UserController {
     public ResponseEntity<UserDTO> createUser(@RequestBody NewUserRequest request) {
         log.info("Creating new user: {}", request);
         return ResponseEntity.ok(userService.createUser(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UpdateUserRequest request) {
+        log.info("Updating user: {}", request);
+        return ResponseEntity.ok(userService.updateUser(id, request));
     }
 }

@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.UserDTO;
-import srl.ramaiana.expedix.model.request.NewUserRequest;
+import srl.ramaiana.expedix.model.request.user.NewUserRequest;
+import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 
 import java.util.List;
 
@@ -45,4 +46,19 @@ public class UserMapper {
         user.setSettlementList(List.of());
         return user;
     }
+
+    public void updateUserFromRequest(UpdateUserRequest request, User user) {
+        if (request == null || user == null) {
+            return;
+        }
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(request.getPassword());
+        }
+
+        if (request.getPhone() != null && !request.getPhone().isBlank()) {
+            user.setPhoneNumber(request.getPhone());
+        }
+    }
+
 }

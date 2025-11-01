@@ -1,4 +1,4 @@
-package srl.ramaiana.expedix.model.request;
+package srl.ramaiana.expedix.model.request.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

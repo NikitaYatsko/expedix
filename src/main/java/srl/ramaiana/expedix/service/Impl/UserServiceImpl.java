@@ -8,7 +8,8 @@ import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
-import srl.ramaiana.expedix.model.request.NewUserRequest;
+import srl.ramaiana.expedix.model.request.user.NewUserRequest;
+import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
@@ -34,5 +35,16 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(request);
         userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    @Override
+    public UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new DataNotFoundException("User not found!")
+        );
+        userMapper.updateUserFromRequest(request, user);
+        userRepository.save(user);
+        return userMapper.toDto(user);
+
     }
 }

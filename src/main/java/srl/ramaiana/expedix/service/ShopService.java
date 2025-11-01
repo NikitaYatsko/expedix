@@ -2,7 +2,7 @@ package srl.ramaiana.expedix.service;
 
 import jakarta.validation.constraints.NotNull;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
-import srl.ramaiana.expedix.model.request.ShopRequest;
+import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 
 public interface ShopService {
     ShopDTO getShopById(@NotNull Integer shopId);

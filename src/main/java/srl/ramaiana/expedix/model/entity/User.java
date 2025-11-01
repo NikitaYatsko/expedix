@@ -22,7 +22,7 @@ public class User {
     @NotBlank
     private String fullName;
     @NotBlank
-    @Size(min = 6, max = 30)
+    @Size(min = 6, max = 80)
     private String password;
     @Column(name = "phone")
     @NotBlank

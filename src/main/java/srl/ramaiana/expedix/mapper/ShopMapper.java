@@ -3,7 +3,7 @@ package srl.ramaiana.expedix.mapper;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
 import srl.ramaiana.expedix.model.entity.Shop;
-import srl.ramaiana.expedix.model.request.ShopRequest;
+import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 
 @Component
 public class ShopMapper {

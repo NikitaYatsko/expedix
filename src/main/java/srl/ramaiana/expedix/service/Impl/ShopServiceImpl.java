@@ -7,7 +7,7 @@ import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.ShopMapper;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
 import srl.ramaiana.expedix.model.entity.Shop;
-import srl.ramaiana.expedix.model.request.ShopRequest;
+import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.service.ShopService;
 
