@@ -14,11 +14,12 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class CommonControllerAdvice {
 
-    private record ErrorResponse(LocalDateTime timestamp, String message, int status) {}
+    private record ErrorResponse(LocalDateTime timestamp, String message, int status) {
+    }
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(DataNotFoundException ex) {
-        log.warn("Data not found: {}", ex.getMessage()); // <-- логирование
+        log.warn("Data not found: {}", ex.getMessage());
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
@@ -30,7 +31,7 @@ public class CommonControllerAdvice {
 
     @ExceptionHandler(DataExistsException.class)
     public ResponseEntity<ErrorResponse> handleDataExistsException(DataExistsException ex) {
-        log.warn("Data already exists: {}", ex.getMessage()); // <-- логирование
+        log.warn("Data already exists: {}", ex.getMessage());
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
@@ -40,10 +41,10 @@ public class CommonControllerAdvice {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // 👇 добавим универсальный обработчик, чтобы всё остальное не терялось
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
-        log.error("Unexpected error: ", ex); // <-- полный stack trace попадёт в лог
+        log.error("Unexpected error: ", ex);
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
