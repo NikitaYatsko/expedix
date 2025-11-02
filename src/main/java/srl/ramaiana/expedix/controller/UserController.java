@@ -2,6 +2,9 @@ package srl.ramaiana.expedix.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.UserDTO;
@@ -26,9 +29,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
+    public ResponseEntity<Page<UserDTO>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         log.info("Getting all users");
-        return ResponseEntity.ok(userService.getAllUsers());
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
     @PostMapping
