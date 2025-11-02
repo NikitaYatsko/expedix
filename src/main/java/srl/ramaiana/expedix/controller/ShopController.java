@@ -9,6 +9,8 @@ import srl.ramaiana.expedix.model.dto.ShopDTO;
 import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 import srl.ramaiana.expedix.service.ShopService;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +23,12 @@ public class ShopController {
     public ResponseEntity<ShopDTO> getShopById(@PathVariable Integer id) {
         log.info("Getting shop by id {}", id);
         return ResponseEntity.ok(shopService.getShopById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ShopDTO>> getAllShops() {
+        log.info("Getting all shops");
+        return ResponseEntity.ok(shopService.getAllShops());
     }
 
     @PostMapping

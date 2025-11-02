@@ -13,6 +13,9 @@ import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -55,5 +58,13 @@ public class UserServiceImpl implements UserService {
         );
         user.setIsDeleted(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

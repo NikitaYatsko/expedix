@@ -9,6 +9,8 @@ import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.service.UserService;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +23,12 @@ public class UserController {
     public ResponseEntity<UserDTO> findUserById(@PathVariable Integer id) {
         log.info("Getting user by ID: {}", id);
         return ResponseEntity.ok(userService.findUserById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        log.info("Getting all users");
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @PostMapping

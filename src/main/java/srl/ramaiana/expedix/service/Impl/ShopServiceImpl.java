@@ -11,6 +11,9 @@ import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.service.ShopService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class ShopServiceImpl implements ShopService {
@@ -50,4 +53,13 @@ public class ShopServiceImpl implements ShopService {
         shop.setIsDeleted(true);
         shopRepository.save(shop);
     }
+
+    @Override
+    public List<ShopDTO> getAllShops() {
+        List<Shop> shops = shopRepository.findAll();
+        return shops.stream()
+                .map(shopMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
