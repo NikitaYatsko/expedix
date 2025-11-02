@@ -2,6 +2,8 @@ package srl.ramaiana.expedix.service.Impl;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.ShopMapper;
@@ -55,11 +57,18 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
+    public Page<ShopDTO> getAllShops(Pageable pageable) {
+        return shopRepository.findAll(pageable)
+                .map(shopMapper::toDto);
+    }
+
+
+   /* @Override
     public List<ShopDTO> getAllShops() {
         List<Shop> shops = shopRepository.findAll();
         return shops.stream()
                 .map(shopMapper::toDto)
                 .collect(Collectors.toList());
-    }
+    }*/
 
 }
