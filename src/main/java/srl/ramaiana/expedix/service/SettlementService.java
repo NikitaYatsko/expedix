@@ -7,4 +7,5 @@ import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 public interface SettlementService
 {
     SettlementDTO getSettlementById(@NotNull Integer id);
+    SettlementDTO createSettlement(@NotNull Integer id ,@NotNull NewSettlementRequest settlementRequest);
 }
