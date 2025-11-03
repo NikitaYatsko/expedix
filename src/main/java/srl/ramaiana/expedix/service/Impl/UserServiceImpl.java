@@ -12,9 +12,12 @@ import srl.ramaiana.expedix.model.dto.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
+import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
+
+import java.util.List;
 
 
 @Service
@@ -63,10 +66,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> getAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable)
+    public PaginationResponse<UserDTO> getAllUsers(Pageable pageable) {
+        Page<UserDTO> posts = userRepository.findAll(pageable)
                 .map(userMapper::toDto);
-    }
 
+        return new PaginationResponse<>(
+                posts.getContent(),
+                new PaginationResponse.Pagination(
+                        posts.getTotalElements(),
+                        pageable.getPageSize(),
+                        posts.getNumber() + 1,
+                        posts.getTotalPages()
+                )
+
+        );
+
+    }
 
 }

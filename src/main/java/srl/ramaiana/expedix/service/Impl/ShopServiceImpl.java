@@ -10,6 +10,7 @@ import srl.ramaiana.expedix.mapper.ShopMapper;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
 import srl.ramaiana.expedix.model.entity.Shop;
 import srl.ramaiana.expedix.model.request.shop.ShopRequest;
+import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.service.ShopService;
 
@@ -57,9 +58,20 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Page<ShopDTO> getAllShops(Pageable pageable) {
-        return shopRepository.findAll(pageable)
+    public PaginationResponse<ShopDTO> getAllShops(Pageable pageable) {
+        Page<ShopDTO> shops = shopRepository.findAll(pageable)
                 .map(shopMapper::toDto);
+
+        return new PaginationResponse<>(
+                shops.getContent(),
+                new PaginationResponse.Pagination(
+                        shops.getTotalElements(),
+                        pageable.getPageSize(),
+                        shops.getNumber() + 1,
+                        shops.getTotalPages()
+                )
+        );
+
     }
 
 

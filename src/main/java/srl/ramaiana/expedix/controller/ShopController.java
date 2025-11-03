@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
 import srl.ramaiana.expedix.model.request.shop.ShopRequest;
+import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.ShopService;
 
 
@@ -28,13 +29,14 @@ public class ShopController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ShopDTO>> getAllShops(
+    public ResponseEntity<PaginationResponse<ShopDTO>> getAllShops(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
         log.info("Getting all shops");
-        return ResponseEntity.ok(shopService.getAllShops(pageable));
+        PaginationResponse<ShopDTO> response = shopService.getAllShops(pageable);
+        return ResponseEntity.ok(response);
     }
 
 
