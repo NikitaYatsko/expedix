@@ -32,7 +32,8 @@ public class User {
     private String email;
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
-    @OneToMany
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Settlement> settlementList;
+
 
 }

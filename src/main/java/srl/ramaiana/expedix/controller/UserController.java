@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +40,7 @@ public class UserController {
 
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody NewUserRequest request) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid NewUserRequest request) {
         log.info("Creating new user: {}", request);
         return ResponseEntity.ok(userService.createUser(request));
     }

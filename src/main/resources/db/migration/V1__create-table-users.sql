@@ -5,6 +5,7 @@ CREATE TABLE expedix.users
     full_name     VARCHAR(100) NOT NULL,
     phone         VARCHAR(20)  not null unique,
     password      varchar(80)  not null,
+    is_deleted    boolean      not null default false,
     email         VARCHAR(100)
 );
 

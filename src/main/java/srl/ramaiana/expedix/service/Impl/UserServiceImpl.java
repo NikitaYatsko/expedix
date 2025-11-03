@@ -18,6 +18,7 @@ import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -40,13 +41,10 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DataExistsException("Email already exists!");
         }
-        User user = userMapper.toEntity(request);
-        if (request.getPassword().equals(request.getConfirmPassword())) {
-            userRepository.save(user);
-        } else {
+        if (!Objects.equals(request.getPassword(), request.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match!");
         }
-
+        User user = userMapper.toEntity(request);
         return userMapper.toDto(user);
     }
 
