@@ -11,6 +11,8 @@ public class NewUserRequest {
     private String email;
     @NotBlank(message = "You must have a password")
     private String password;
+    @NotBlank(message = "Confirm Password")
+    private String confirmPassword;
     @NotBlank(message = "Phone is necessary")
     private String phone;
 }

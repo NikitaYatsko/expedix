@@ -41,7 +41,12 @@ public class UserServiceImpl implements UserService {
             throw new DataExistsException("Email already exists!");
         }
         User user = userMapper.toEntity(request);
-        userRepository.save(user);
+        if (request.getPassword().equals(request.getConfirmPassword())) {
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("Passwords do not match!");
+        }
+
         return userMapper.toDto(user);
     }
 

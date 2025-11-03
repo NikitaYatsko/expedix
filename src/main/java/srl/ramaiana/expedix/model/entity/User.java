@@ -31,7 +31,7 @@ public class User {
     @NotBlank
     private String email;
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
     @OneToMany
     private List<Settlement> settlementList;
 
