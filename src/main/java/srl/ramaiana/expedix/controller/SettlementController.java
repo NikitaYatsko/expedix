@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.SettlementDTO;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
+import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 import srl.ramaiana.expedix.service.SettlementService;
 
 @Slf4j
@@ -33,5 +34,16 @@ public class SettlementController {
         SettlementDTO dto = settlementService.createSettlement(id, request);
         return ResponseEntity.ok(dto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SettlementDTO> updateSettlement(
+            @PathVariable Integer id,
+            @RequestBody UpdateSettlementRequest request
+    ) {
+        log.info("Updating settlement with id {} using request {}", id, request);
+        SettlementDTO updatedSettlement = settlementService.updateSettlement(id, request);
+        return ResponseEntity.ok(updatedSettlement);
+    }
+
 
 }

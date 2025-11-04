@@ -13,5 +13,5 @@ public class UserDTO {
     private String phoneNumber;
     private String email;
     private Boolean isDeleted;
-    private List<SettlementDTO> settlementList;
+    private List<SettlementMappedByUserDTO> settlementList;
 }

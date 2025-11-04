@@ -4,11 +4,9 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Data
-public class SettlementDTO {
+public class SettlementMappedByUserDTO {
     private Integer id;
     private String name;
-    private String assignedTo;
     private List<ShopDTO> shopList = new ArrayList<>();
 }

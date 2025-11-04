@@ -31,7 +31,7 @@ public class UserMapper {
 
         userDTO.setSettlementList(user.getSettlementList()
                 .stream()
-                .map(settlementMapper::toDto).toList());
+                .map(settlementMapper::toSettlementMappedByUser).toList());
         return userDTO;
     }
 

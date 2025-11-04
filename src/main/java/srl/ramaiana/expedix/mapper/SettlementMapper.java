@@ -3,9 +3,11 @@ package srl.ramaiana.expedix.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.SettlementDTO;
+import srl.ramaiana.expedix.model.dto.SettlementMappedByUserDTO;
 import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
+import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class SettlementMapper {
         SettlementDTO settlementDTO = new SettlementDTO();
         settlementDTO.setId(settlement.getId());
         settlementDTO.setName(settlement.getName());
+        settlementDTO.setAssignedTo("anme");
         settlementDTO.setShopList(List.of());
         return settlementDTO;
     }
@@ -35,9 +38,9 @@ public class SettlementMapper {
 
         Settlement settlement = new Settlement();
         settlement.setName(settlementRequest.getName());
-        settlement.setUser(user); // привязываем к текущему пользователю
+        settlement.setUser(user);
 
-        // Если хочешь, чтобы пользователь знал о новом settlement:
+
         if (user.getSettlementList() != null) {
             user.getSettlementList().add(settlement);
         }
@@ -45,6 +48,28 @@ public class SettlementMapper {
         return settlement;
     }
 
+    public Settlement updateSettlement(UpdateSettlementRequest request, Settlement settlement, User user) {
+        if (settlement == null) return null;
+
+        if (request.getName() != null) {
+            settlement.setName(request.getName());
+        }
+
+        if (user != null) {
+            settlement.setUser(user);
+        }
+
+        return settlement;
+    }
+
+    public SettlementMappedByUserDTO toSettlementMappedByUser(Settlement settlement) {
+        if (settlement == null) return null;
+
+        SettlementMappedByUserDTO settlementMappedByUserDTO = new SettlementMappedByUserDTO();
+        settlementMappedByUserDTO.setId(settlement.getId());
+        settlementMappedByUserDTO.setName(settlement.getName());
+        return settlementMappedByUserDTO;
+    }
 
 
 }
