@@ -9,7 +9,8 @@ import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -31,7 +32,11 @@ public class SettlementMapper {
         } else {
             settlementDTO.setAssignedTo("Не назначено");
         }
-        settlementDTO.setShopList(List.of());
+        settlementDTO.setShopList(settlement.getShops() != null ?
+                settlement.getShops()
+                        .stream()
+                        .map(shopMapper::toDto).collect(Collectors.toList()) :
+                new ArrayList<>());
         return settlementDTO;
     }
 
@@ -72,6 +77,11 @@ public class SettlementMapper {
         SettlementMappedByUserDTO settlementMappedByUserDTO = new SettlementMappedByUserDTO();
         settlementMappedByUserDTO.setId(settlement.getId());
         settlementMappedByUserDTO.setName(settlement.getName());
+        settlementMappedByUserDTO.setShopList(settlement.getShops() != null ?
+                settlement.getShops()
+                        .stream()
+                        .map(shopMapper::toDto).collect(Collectors.toList()) :
+                new ArrayList<>());
         return settlementMappedByUserDTO;
     }
 

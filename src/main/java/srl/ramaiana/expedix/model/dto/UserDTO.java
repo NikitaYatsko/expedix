@@ -1,6 +1,7 @@
 package srl.ramaiana.expedix.model.dto;
 
 
+
 import lombok.Data;
 
 import java.util.List;
