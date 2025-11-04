@@ -1,6 +1,5 @@
 package srl.ramaiana.expedix.controller;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +22,15 @@ public class SettlementController {
         return ResponseEntity.ok(settlementService.getSettlementById(id));
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping()
     public ResponseEntity<SettlementDTO> saveSettlement(
-            @PathVariable Integer userId,
             @RequestBody NewSettlementRequest request) {
 
-        log.info("Saving settlement {} for user {}", request, userId);
+        //TODO replace with real user,
+        int id = 1;
+        log.info("Saving settlement {} for user {}", request, id);
 
-        SettlementDTO dto = settlementService.createSettlement(userId, request);
+        SettlementDTO dto = settlementService.createSettlement(id, request);
         return ResponseEntity.ok(dto);
     }
 

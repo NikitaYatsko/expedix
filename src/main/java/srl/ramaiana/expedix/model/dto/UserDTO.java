@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class UserDTO {
+    private Long userId;
     private String personalCode;
     private String fullName;
     private String phoneNumber;
