@@ -15,6 +15,9 @@ import srl.ramaiana.expedix.repository.SettlementRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.SettlementService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 @Service
@@ -57,6 +60,14 @@ public class SettlementServiceImpl implements SettlementService {
         Settlement savedSettlement = settlementRepository.save(settlementToSave);
 
         return settlementMapper.toDto(savedSettlement);
+    }
+
+    @Override
+    public List<SettlementDTO> getSettlements() {
+        return settlementRepository.findAll()
+                .stream()
+                .map(settlementMapper::toDto)
+                .collect(Collectors.toList());
     }
 
 }

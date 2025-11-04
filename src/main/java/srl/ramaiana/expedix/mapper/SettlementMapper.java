@@ -26,7 +26,11 @@ public class SettlementMapper {
         SettlementDTO settlementDTO = new SettlementDTO();
         settlementDTO.setId(settlement.getId());
         settlementDTO.setName(settlement.getName());
-        settlementDTO.setAssignedTo("anme");
+        if (settlement.getUser() != null) {
+            settlementDTO.setAssignedTo("Агент: " + settlement.getUser().getFullName());
+        } else {
+            settlementDTO.setAssignedTo("Не назначено");
+        }
         settlementDTO.setShopList(List.of());
         return settlementDTO;
     }

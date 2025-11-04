@@ -9,6 +9,8 @@ import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 import srl.ramaiana.expedix.service.SettlementService;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +23,11 @@ public class SettlementController {
     public ResponseEntity<SettlementDTO> getSettlementById(@PathVariable Integer id) {
         log.info("Getting settlement by id {}", id);
         return ResponseEntity.ok(settlementService.getSettlementById(id));
+    }
+    @GetMapping
+    public ResponseEntity<List<SettlementDTO>> getAllSettlements() {
+        log.info("Getting all settlements");
+        return ResponseEntity.ok(settlementService.getSettlements());
     }
 
     @PostMapping()
