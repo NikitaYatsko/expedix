@@ -32,7 +32,7 @@ public class User {
     private String email;
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Settlement> settlementList;
 
 

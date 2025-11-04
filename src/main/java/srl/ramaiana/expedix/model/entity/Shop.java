@@ -1,6 +1,5 @@
 package srl.ramaiana.expedix.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -27,6 +26,5 @@ public class Shop {
 
     @ManyToOne
     @JoinColumn(name = "settlement_id")
-    @JsonBackReference
     private Settlement settlement;
 }

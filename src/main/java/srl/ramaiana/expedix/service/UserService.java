@@ -1,7 +1,7 @@
 package srl.ramaiana.expedix.service;
 
 import jakarta.validation.constraints.NotNull;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import srl.ramaiana.expedix.model.dto.UserDTO;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;

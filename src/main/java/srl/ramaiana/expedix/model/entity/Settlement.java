@@ -1,16 +1,17 @@
 package srl.ramaiana.expedix.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.List;
 
+
 @Data
 @Entity
 @Table(name = "settlements", schema = "expedix")
+
 public class Settlement {
 
     @Id
@@ -23,10 +24,9 @@ public class Settlement {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+
     private User user;
 
-    @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "settlement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Shop> shops;
 }

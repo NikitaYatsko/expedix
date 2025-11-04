@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.service.Impl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,20 +14,17 @@ import srl.ramaiana.expedix.mapper.UserMapper;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
-import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
-import java.util.List;
 import java.util.Objects;
 
-
+@Transactional()
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ShopRepository shopRepository;
 
     @Override
     public UserDTO findUserById(@NotNull Integer userId) {
