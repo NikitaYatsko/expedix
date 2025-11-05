@@ -71,15 +71,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public PaginationResponse<UserDTO> getAllUsers(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
-        Page<UserDTO> posts = users.map(userMapper::toDto);
+        Page<UserDTO> dto = users.map(userMapper::toDto);
 
         return new PaginationResponse<>(
-                posts.getContent(),
+                dto.getContent(),
                 new PaginationResponse.Pagination(
-                        posts.getTotalElements(),
+                        dto.getTotalElements(),
                         pageable.getPageSize(),
-                        posts.getNumber() + 1,
-                        posts.getTotalPages()
+                        dto.getNumber() + 1,
+                        dto.getTotalPages()
                 )
         );
     }

@@ -3,6 +3,8 @@ package srl.ramaiana.expedix.service.Impl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
@@ -12,12 +14,10 @@ import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
+import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.SettlementRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.SettlementService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -65,11 +65,21 @@ public class SettlementServiceImpl implements SettlementService {
     }
 
     @Override
-    public List<SettlementDTO> getSettlements() {
-        return settlementRepository.findAll()
-                .stream()
-                .map(settlementMapper::toDto)
-                .collect(Collectors.toList());
-    }
+    public PaginationResponse<SettlementDTO> getAllSettlements(Pageable pageable) {
+            Page<Settlement> settlements = settlementRepository.findAll(pageable);
+            Page<SettlementDTO> dto = settlements.map(settlementMapper::toDto);
+
+            return new PaginationResponse<>(
+                    dto.getContent(),
+                    new PaginationResponse.Pagination(
+                            dto.getTotalElements(),
+                            pageable.getPageSize(),
+                            dto.getNumber() + 1,
+                            dto.getTotalPages()
+                    )
+            );
+        }
+
+
 
 }
