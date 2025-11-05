@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.service.Impl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,7 @@ public class SettlementServiceImpl implements SettlementService {
 
     }
 
+    @Transactional
     @Override
     public SettlementDTO updateSettlement(@NotNull Integer id, @NotNull UpdateSettlementRequest settlementRequest) {
         Settlement settlement = settlementRepository.findById(id)

@@ -8,6 +8,8 @@ import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 
+import java.util.List;
+
 public interface UserService {
     UserDTO findUserById(@NotNull Integer userId);
     UserDTO createUser(@NotNull NewUserRequest request);

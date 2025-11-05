@@ -17,7 +17,9 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Transactional()
 @Service
@@ -68,8 +70,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponse<UserDTO> getAllUsers(Pageable pageable) {
-        Page<UserDTO> posts = userRepository.findAll(pageable)
-                .map(userMapper::toDto);
+        Page<User> users = userRepository.findAll(pageable); // EntityGraph подгружает settlements
+        Page<UserDTO> posts = users.map(userMapper::toDto);
 
         return new PaginationResponse<>(
                 posts.getContent(),
@@ -79,9 +81,8 @@ public class UserServiceImpl implements UserService {
                         posts.getNumber() + 1,
                         posts.getTotalPages()
                 )
-
         );
-
     }
+
 
 }

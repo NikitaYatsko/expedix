@@ -13,6 +13,8 @@ import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.UserService;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -37,6 +39,7 @@ public class UserController {
         PaginationResponse<UserDTO> response = userService.getAllUsers(pageable);
         return ResponseEntity.ok(response);
     }
+
 
 
     @PostMapping

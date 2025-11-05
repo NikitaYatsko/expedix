@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.service.Impl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class ShopServiceImpl implements ShopService {
         return shopMapper.toDto(shop);
     }
 
-
+    @Transactional
     @Override
     public ShopDTO updateShopById(@NotNull Integer shopId, @NotNull ShopRequest shopRequest) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
