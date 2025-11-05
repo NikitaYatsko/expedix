@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.ShopDTO;
+import srl.ramaiana.expedix.model.dto.ShopMappedBySettlementDTO;
 import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.ShopService;

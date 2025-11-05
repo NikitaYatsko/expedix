@@ -10,5 +10,5 @@ public class SettlementDTO {
     private Integer id;
     private String name;
     private String assignedTo;
-    private List<ShopDTO> shopList = new ArrayList<>();
+    private List<ShopMappedBySettlementDTO> shopList = new ArrayList<>();
 }

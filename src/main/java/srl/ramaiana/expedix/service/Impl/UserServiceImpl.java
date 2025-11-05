@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginationResponse<UserDTO> getAllUsers(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable); // EntityGraph подгружает settlements
+        Page<User> users = userRepository.findAll(pageable);
         Page<UserDTO> posts = users.map(userMapper::toDto);
 
         return new PaginationResponse<>(

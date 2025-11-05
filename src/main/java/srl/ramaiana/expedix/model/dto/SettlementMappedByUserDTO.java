@@ -8,5 +8,5 @@ import java.util.List;
 public class SettlementMappedByUserDTO {
     private Integer id;
     private String name;
-    private List<ShopDTO> shopList = new ArrayList<>();
+    private List<ShopMappedBySettlementDTO> shopList = new ArrayList<>();
 }

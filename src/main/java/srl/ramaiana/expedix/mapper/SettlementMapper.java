@@ -35,7 +35,7 @@ public class SettlementMapper {
         settlementDTO.setShopList(settlement.getShops() != null ?
                 settlement.getShops()
                         .stream()
-                        .map(shopMapper::toDto).collect(Collectors.toList()) :
+                        .map(shopMapper::toMappedBySettlementDto).collect(Collectors.toList()) :
                 new ArrayList<>());
         return settlementDTO;
     }
@@ -80,7 +80,7 @@ public class SettlementMapper {
         settlementMappedByUserDTO.setShopList(settlement.getShops() != null ?
                 settlement.getShops()
                         .stream()
-                        .map(shopMapper::toDto).collect(Collectors.toList()) :
+                        .map(shopMapper::toMappedBySettlementDto).collect(Collectors.toList()) :
                 new ArrayList<>());
         return settlementMappedByUserDTO;
     }
