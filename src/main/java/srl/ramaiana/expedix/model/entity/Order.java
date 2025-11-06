@@ -31,5 +31,5 @@ public class Order {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
-    private String text;
+    private String comment;
 }
