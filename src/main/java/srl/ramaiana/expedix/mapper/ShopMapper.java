@@ -27,7 +27,12 @@ public class ShopMapper {
         shopDTO.setId(shop.getId());
         shopDTO.setName(shop.getName());
         shopDTO.setAddress(shop.getAddress());
-        shopDTO.setLocatedIn("Локация: " + shop.getSettlement().getName());
+        if (shop.getSettlement() != null && shop.getSettlement().getName() != null) {
+            shopDTO.setLocatedIn(shop.getSettlement().getName());
+        } else {
+            shopDTO.setLocatedIn("Не указан");
+        }
+
         return shopDTO;
     }
 
