@@ -11,8 +11,8 @@ public class OrderMapper {
             return null;
         }
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setId(order.getId());
-        orderDTO.setAddress(order.getAddress());
+        orderDTO.setOrderId(order.getId());
+        orderDTO.setAddress(order.getShop().getAddress());
         orderDTO.setCreated(order.getCreated());
         orderDTO.setShopName(order.getShop().getName());
         orderDTO.setOrderStatus(order.getOrderStatus());

@@ -23,8 +23,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id")
     private Shop shop;
-    @Column(name = "address", nullable = false)
-    private String address;
     @CreationTimestamp
     @Column(name = "created")
     private LocalDateTime created;

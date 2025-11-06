@@ -45,3 +45,18 @@ INSERT INTO expedix.shops (name, address, is_deleted, settlement_id) VALUES
                                                                          ('Cahul Market', 'Str. Stefan cel Mare 10', false, 3),
                                                                          ('Tiraspol Shop', 'Str. Lenin 5', false, 4),
                                                                          ('Orhei MiniShop', 'Str. Republicii 3', false, 5);
+
+
+CREATE TYPE order_status AS ENUM ('NEW', 'APPROVED', 'DELIVERED', 'CANCELED');
+
+
+create table expedix.orders
+(
+    id            bigserial primary key,
+    user_id       int references users (id)       not null,
+    settlement_id int references settlements (id) not null,
+    shop_id       int references shops (id)       not null,
+    created       timestamp    default current_timestamp,
+    order_status  order_status default 'NEW'      not null,
+    comment       text
+)

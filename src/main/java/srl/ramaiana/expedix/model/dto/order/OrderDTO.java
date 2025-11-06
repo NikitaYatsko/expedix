@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class OrderDTO {
-    private long Id;
+    private long orderId;
     private String createdBy;
     private String location;
     private String shopName;
