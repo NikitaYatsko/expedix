@@ -40,9 +40,12 @@ public class UserController {
     }
 
     @GetMapping("/only")
-    public ResponseEntity<PaginationResponse<UserOnlyDTO>> getUsersOnly() {
+    public ResponseEntity<PaginationResponse<UserOnlyDTO>> getUsersOnly(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         log.info("Getting user-only");
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(page, size);
         PaginationResponse<UserOnlyDTO> response = userService.getOnlyUsers(pageable);
         return ResponseEntity.ok(response);
     }

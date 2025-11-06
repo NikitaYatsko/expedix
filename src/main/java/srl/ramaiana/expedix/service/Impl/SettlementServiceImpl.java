@@ -10,6 +10,7 @@ import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.SettlementMapper;
 import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementOnlyDTO;
 import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
@@ -68,6 +69,22 @@ public class SettlementServiceImpl implements SettlementService {
     public PaginationResponse<SettlementDTO> getAllSettlements(Pageable pageable) {
         Page<Settlement> settlements = settlementRepository.findAll(pageable);
         Page<SettlementDTO> dto = settlements.map(settlementMapper::toDto);
+
+        return new PaginationResponse<>(
+                dto.getContent(),
+                new PaginationResponse.Pagination(
+                        dto.getTotalElements(),
+                        pageable.getPageSize(),
+                        dto.getNumber() + 1,
+                        dto.getTotalPages()
+                )
+        );
+    }
+
+    @Override
+    public PaginationResponse<SettlementOnlyDTO> getOnlySettlements(Pageable pageable) {
+        Page<Settlement> settlements = settlementRepository.findSettlementsOnly(pageable);
+        Page<SettlementOnlyDTO> dto = settlements.map(settlementMapper::toSettlementOnly);
 
         return new PaginationResponse<>(
                 dto.getContent(),

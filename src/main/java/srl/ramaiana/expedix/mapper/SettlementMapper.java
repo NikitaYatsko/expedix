@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
 import srl.ramaiana.expedix.model.dto.settlement.SettlementMappedByUserDTO;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementOnlyDTO;
 import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
@@ -85,5 +86,17 @@ public class SettlementMapper {
         return settlementMappedByUserDTO;
     }
 
+    public SettlementOnlyDTO toSettlementOnly(Settlement settlement) {
+        if (settlement == null) return null;
+        SettlementOnlyDTO settlementOnlyDTO = new SettlementOnlyDTO();
+        settlementOnlyDTO.setId(settlement.getId());
+        settlementOnlyDTO.setName(settlement.getName());
+        if (settlement.getUser() != null) {
+            settlementOnlyDTO.setAssignedTo("Агент: " + settlement.getUser().getFullName());
+        } else {
+            settlementOnlyDTO.setAssignedTo("Не назначено");
+        }
+        return settlementOnlyDTO;
+    }
 
 }

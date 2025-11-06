@@ -3,6 +3,7 @@ package srl.ramaiana.expedix.service;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementOnlyDTO;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
@@ -16,4 +17,6 @@ public interface SettlementService {
     SettlementDTO updateSettlement(@NotNull Integer id, @NotNull UpdateSettlementRequest settlementRequest);
 
     PaginationResponse<SettlementDTO> getAllSettlements(Pageable pageable);
+
+    PaginationResponse<SettlementOnlyDTO> getOnlySettlements(Pageable pageable);
 }
