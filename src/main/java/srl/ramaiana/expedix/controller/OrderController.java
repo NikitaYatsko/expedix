@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.service.OrderService;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -21,5 +23,11 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
         log.info("Getting order by id: {}", id);
         return ResponseEntity.ok(orderService.getOrderById(id));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        log.info("Getting all orders");
+        return ResponseEntity.ok(orderService.getOrders());
     }
 }

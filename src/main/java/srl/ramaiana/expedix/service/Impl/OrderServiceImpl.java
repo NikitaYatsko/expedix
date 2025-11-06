@@ -9,6 +9,9 @@ import srl.ramaiana.expedix.model.entity.Order;
 import srl.ramaiana.expedix.repository.OrderRepository;
 import srl.ramaiana.expedix.service.OrderService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -21,5 +24,12 @@ public class OrderServiceImpl implements OrderService {
                 () -> new DataNotFoundException("Order not found with id " + id)
         );
         return orderMapper.toOrderDto(order);
+    }
+
+    @Override
+    public List<OrderDTO> getOrders() {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderDTO> dtos = orders.stream().map(orderMapper::toOrderDto).toList();
+        return dtos;
     }
 }
