@@ -2,8 +2,9 @@ package srl.ramaiana.expedix.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import srl.ramaiana.expedix.model.dto.user.UserDTO;
+import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.entity.User;
-import srl.ramaiana.expedix.model.dto.UserDTO;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 
@@ -14,6 +15,23 @@ import java.util.List;
 public class UserMapper {
 
     private final SettlementMapper settlementMapper;
+
+
+    public UserOnlyDTO toUserOnlyDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+        UserOnlyDTO dto = new UserOnlyDTO();
+
+        dto.setUserId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setPersonalCode(user.getPersonalCode());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setIsDeleted(user.getIsDeleted());
+        return dto;
+
+    }
 
     public UserDTO toDto(User user) {
 

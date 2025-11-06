@@ -8,8 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
+import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.entity.User;
-import srl.ramaiana.expedix.model.dto.UserDTO;
+import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
@@ -17,9 +18,7 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Transactional()
 @Service
@@ -84,5 +83,19 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public PaginationResponse<UserOnlyDTO> getOnlyUsers(Pageable pageable) {
+        Page<User> users = userRepository.findUsersOnly(pageable);
+        Page<UserOnlyDTO> dto = users.map(userMapper::toUserOnlyDTO);
 
+        return new PaginationResponse<>(
+                dto.getContent(),
+                new PaginationResponse.Pagination(
+                        dto.getTotalElements(),
+                        pageable.getPageSize(),
+                        dto.getNumber() + 1,
+                        dto.getTotalPages()
+                )
+        );
+    }
 }

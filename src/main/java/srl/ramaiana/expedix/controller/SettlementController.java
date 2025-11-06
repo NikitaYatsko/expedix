@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import srl.ramaiana.expedix.model.dto.SettlementDTO;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
@@ -37,7 +37,8 @@ public class SettlementController {
         return ResponseEntity.ok(settlementService.getAllSettlements(pageable));
     }
 
-    @PostMapping()
+
+    @PostMapping
     public ResponseEntity<SettlementDTO> saveSettlement(
             @RequestBody NewSettlementRequest request) {
 

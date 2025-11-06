@@ -7,13 +7,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import srl.ramaiana.expedix.model.dto.UserDTO;
+import srl.ramaiana.expedix.model.dto.user.UserDTO;
+import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.UserService;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +39,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/only")
+    public ResponseEntity<PaginationResponse<UserOnlyDTO>> getUsersOnly() {
+        log.info("Getting user-only");
+        Pageable pageable = PageRequest.of(0, 10);
+        PaginationResponse<UserOnlyDTO> response = userService.getOnlyUsers(pageable);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid NewUserRequest request) {

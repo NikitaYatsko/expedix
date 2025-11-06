@@ -1,8 +1,9 @@
-package srl.ramaiana.expedix.model.dto;
+package srl.ramaiana.expedix.model.dto.user;
 
 
 
 import lombok.Data;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementMappedByUserDTO;
 
 import java.util.List;
 

@@ -8,22 +8,17 @@ import lombok.Data;
 @Entity
 @Table(name = "shops", schema = "expedix")
 public class Shop {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @NotBlank
     @Column(name = "name")
     private String name;
-
     @NotBlank
     @Column(name = "address")
     private String address;
-
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
-
     @ManyToOne
     @JoinColumn(name = "settlement_id")
     private Settlement settlement;

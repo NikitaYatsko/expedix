@@ -1,8 +1,8 @@
 package srl.ramaiana.expedix.mapper;
 
 import org.springframework.stereotype.Component;
-import srl.ramaiana.expedix.model.dto.ShopDTO;
-import srl.ramaiana.expedix.model.dto.ShopMappedBySettlementDTO;
+import srl.ramaiana.expedix.model.dto.shop.ShopDTO;
+import srl.ramaiana.expedix.model.dto.shop.ShopMappedBySettlementDTO;
 import srl.ramaiana.expedix.model.entity.Shop;
 import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 

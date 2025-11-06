@@ -3,12 +3,11 @@ package srl.ramaiana.expedix.service;
 import jakarta.validation.constraints.NotNull;
 
 import org.springframework.data.domain.Pageable;
-import srl.ramaiana.expedix.model.dto.UserDTO;
+import srl.ramaiana.expedix.model.dto.user.UserDTO;
+import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
-
-import java.util.List;
 
 public interface UserService {
     UserDTO findUserById(@NotNull Integer userId);
@@ -16,4 +15,5 @@ public interface UserService {
     UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request);
     void deleteUser(@NotNull Integer userId);
     PaginationResponse<UserDTO> getAllUsers(Pageable pageable);
+    PaginationResponse<UserOnlyDTO> getOnlyUsers(Pageable pageable);
 }

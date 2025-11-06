@@ -2,8 +2,8 @@ package srl.ramaiana.expedix.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import srl.ramaiana.expedix.model.dto.SettlementDTO;
-import srl.ramaiana.expedix.model.dto.SettlementMappedByUserDTO;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
+import srl.ramaiana.expedix.model.dto.settlement.SettlementMappedByUserDTO;
 import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
