@@ -20,7 +20,6 @@ import srl.ramaiana.expedix.service.UserService;
 
 import java.util.Objects;
 
-@Transactional()
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -44,27 +43,28 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Passwords do not match!");
         }
         User user = userMapper.toEntity(request);
+        userRepository.save(user);
         return userMapper.toDto(user);
     }
 
+    @Transactional
     @Override
     public UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request) {
         User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found!")
         );
         userMapper.updateUserFromRequest(request, user);
-        userRepository.save(user);
         return userMapper.toDto(user);
 
     }
 
+    @Transactional
     @Override
     public void deleteUser(Integer userId) {
         User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found!")
         );
         user.setIsDeleted(true);
-        userRepository.save(user);
     }
 
     @Override

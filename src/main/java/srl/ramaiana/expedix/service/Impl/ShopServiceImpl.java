@@ -28,7 +28,7 @@ public class ShopServiceImpl implements ShopService {
                 () -> new DataNotFoundException("Shop not found"));
         return shopMapper.toDto(shop);
     }
-
+    @Transactional
     @Override
     public ShopDTO createShop(@NotNull ShopRequest shopRequest) {
         Shop shop = shopMapper.toEntity(shopRequest);
@@ -43,16 +43,15 @@ public class ShopServiceImpl implements ShopService {
                 () -> new DataNotFoundException("Shop not found"));
         shop.setAddress(shopRequest.getAddress());
         shop.setName(shopRequest.getName());
-        shopRepository.save(shop);
         return shopMapper.toDto(shop);
     }
-
+    @Transactional
     @Override
     public void deleteShopById(Integer shopId) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
                 () -> new DataNotFoundException("Shop not found"));
         shop.setIsDeleted(true);
-        shopRepository.save(shop);
+
     }
 
     @Override

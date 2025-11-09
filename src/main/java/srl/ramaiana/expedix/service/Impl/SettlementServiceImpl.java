@@ -35,7 +35,7 @@ public class SettlementServiceImpl implements SettlementService {
         );
         return settlementMapper.toDto(settlement);
     }
-
+    @Transactional
     @Override
     public SettlementDTO createSettlement(@NotNull Integer id, @NotNull NewSettlementRequest settlementRequest) {
         if (settlementRepository.existsByName(settlementRequest.getName())) {
@@ -45,7 +45,6 @@ public class SettlementServiceImpl implements SettlementService {
                 () -> new DataNotFoundException("user with id " + id + " not found")
         );
         Settlement settlement = settlementMapper.toEntity(settlementRequest, user);
-        settlementRepository.save(settlement);
         return settlementMapper.toDto(settlement);
 
     }

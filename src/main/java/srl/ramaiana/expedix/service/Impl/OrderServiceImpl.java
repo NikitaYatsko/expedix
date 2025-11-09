@@ -13,6 +13,7 @@ import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.Shop;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
+import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.OrderRepository;
 import srl.ramaiana.expedix.repository.SettlementRepository;
@@ -66,8 +67,20 @@ public class OrderServiceImpl implements OrderService {
                 () -> new DataNotFoundException("Shop not found with id " + request.getShopId())
         );
         Order orderToSave = orderMapper.toEntity(request, user, settlement, shop);
-        orderRepository.save(orderToSave);
-        return orderMapper.toOrderDto(orderToSave);
+        Order saved = orderRepository.save(orderToSave);
+        return orderMapper.toOrderDto(saved);
 
+    }
+
+    @Transactional
+    @Override
+    public OrderDTO updateOrder(Long id, UpdateOrderDTO request) {
+        Order order = orderRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("Order not found with id " + id)
+        );
+        if (request.getStatus() != null) {
+            order.setOrderStatus(request.getStatus());
+        }
+        return orderMapper.toOrderDto(order);
     }
 }
