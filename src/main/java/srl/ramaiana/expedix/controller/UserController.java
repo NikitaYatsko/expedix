@@ -52,9 +52,10 @@ public class UserController {
         PaginationResponse<UserOnlyDTO> response = userService.getOnlyUsers(pageable);
         return ResponseEntity.ok(response);
     }
+
     @GetMapping("/{userId}/orders")
     public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByUser(
-            @PathVariable Long userId,
+            @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

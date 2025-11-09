@@ -15,5 +15,5 @@ public interface OrderService {
     PaginationResponse<OrderDTO> getOrders(Pageable pageable);
     OrderDTO createOrder(@NotNull NewOrderRequest request);
     OrderDTO updateOrder(@NotNull Long id, @NotNull UpdateOrderDTO request);
-    PaginationResponse<OrderDTO> findAllByUser(Long userId, Pageable pageable);
+    PaginationResponse<OrderDTO> findAllByUser(Integer userId, Pageable pageable);
 }

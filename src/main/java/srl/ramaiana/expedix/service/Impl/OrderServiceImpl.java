@@ -88,8 +88,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PaginationResponse<OrderDTO> findAllByUser(Long userId, Pageable pageable) {
-        Page<Order> orders = orderRepository.findAllByUser_Id(userId, pageable);
+    public PaginationResponse<OrderDTO> findAllByUser(Integer userId, Pageable pageable) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new DataNotFoundException("User not found with id " + userId)
+        );
+        Page<Order> orders = orderRepository.findAllByUser(user, pageable);
         Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
 
         return new PaginationResponse<>(
