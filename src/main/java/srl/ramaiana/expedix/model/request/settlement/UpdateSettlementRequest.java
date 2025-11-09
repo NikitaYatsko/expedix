@@ -7,3 +7,4 @@ public class UpdateSettlementRequest {
     private String name;
     private Integer userId;
 }
+
