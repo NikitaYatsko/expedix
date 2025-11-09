@@ -21,6 +21,8 @@ import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.OrderService;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
@@ -38,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
         );
         return orderMapper.toOrderDto(order);
     }
+
 
     @Override
     public PaginationResponse<OrderDTO> getOrders(Pageable pageable) {
@@ -82,5 +85,22 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus(request.getStatus());
         }
         return orderMapper.toOrderDto(order);
+    }
+
+    @Override
+    public PaginationResponse<OrderDTO> findAllByUser(Long userId, Pageable pageable) {
+        Page<Order> orders = orderRepository.findAllByUser_Id(userId, pageable);
+        Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
+
+        return new PaginationResponse<>(
+                dtos.getContent(),
+                new PaginationResponse.Pagination(
+                        dtos.getTotalElements(),
+                        pageable.getPageSize(),
+                        dtos.getNumber() + 1,
+                        dtos.getTotalPages()
+                )
+        );
+
     }
 }

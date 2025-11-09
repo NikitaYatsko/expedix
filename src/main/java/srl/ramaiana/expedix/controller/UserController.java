@@ -7,11 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
+import srl.ramaiana.expedix.service.OrderService;
 import srl.ramaiana.expedix.service.UserService;
 
 @Slf4j
@@ -21,6 +23,7 @@ import srl.ramaiana.expedix.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Integer id) {
@@ -48,6 +51,15 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size);
         PaginationResponse<UserOnlyDTO> response = userService.getOnlyUsers(pageable);
         return ResponseEntity.ok(response);
+    }
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(orderService.findAllByUser(userId, pageable));
     }
 
     @PostMapping

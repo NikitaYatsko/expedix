@@ -59,4 +59,16 @@ create table expedix.orders
     created       timestamp    default current_timestamp,
     order_status  order_status default 'NEW'      not null,
     comment       text
-)
+);
+
+
+create TYPE type_of_unit as enum ('ШТ.','УПК.','КОРОБКА.','НЕ УКАЗАНО');
+create table expedix.products
+(
+    id           bigserial primary key,
+    name         varchar(255) not null,
+    brand        varchar(100) not null,
+    unit_price   decimal(10, 2),
+    type_of_unit type_of_unit not null default 'НЕ УКАЗАНО'
+
+);
