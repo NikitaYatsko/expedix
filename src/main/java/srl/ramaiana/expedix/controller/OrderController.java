@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
+import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.OrderService;
 
@@ -32,5 +34,11 @@ public class OrderController {
         Pageable pageable = PageRequest.of(page, size);
         PaginationResponse<OrderDTO> response = orderService.getOrders(pageable);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody NewOrderRequest request) {
+        log.info("Creating order: {}", request);
+        return ResponseEntity.ok(orderService.createOrder(request));
     }
 }

@@ -3,6 +3,10 @@ package srl.ramaiana.expedix.mapper;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.entity.Order;
+import srl.ramaiana.expedix.model.entity.Settlement;
+import srl.ramaiana.expedix.model.entity.Shop;
+import srl.ramaiana.expedix.model.entity.User;
+import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 
 @Component
 public class OrderMapper {
@@ -20,6 +24,20 @@ public class OrderMapper {
         orderDTO.setLocation(order.getSettlement().getName());
         orderDTO.setComment(order.getComment());
         return orderDTO;
+    }
+
+    public Order toEntity(NewOrderRequest request, User user, Settlement settlement, Shop shop) {
+        if (request == null) {
+            return null;
+        }
+        Order order = new Order();
+
+        order.setUser(user);
+        order.setSettlement(settlement);
+        order.setShop(shop);
+        order.setComment(request.getComment());
+        return order;
+
     }
 
 }

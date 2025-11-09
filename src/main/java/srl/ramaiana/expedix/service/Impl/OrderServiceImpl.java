@@ -1,5 +1,6 @@
 package srl.ramaiana.expedix.service.Impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,8 +9,15 @@ import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.OrderMapper;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.entity.Order;
+import srl.ramaiana.expedix.model.entity.Settlement;
+import srl.ramaiana.expedix.model.entity.Shop;
+import srl.ramaiana.expedix.model.entity.User;
+import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.OrderRepository;
+import srl.ramaiana.expedix.repository.SettlementRepository;
+import srl.ramaiana.expedix.repository.ShopRepository;
+import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.OrderService;
 
 
@@ -18,6 +26,9 @@ import srl.ramaiana.expedix.service.OrderService;
 public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final SettlementRepository settlementRepository;
+    private final ShopRepository shopRepository;
 
     @Override
     public OrderDTO getOrderById(Long id) {
@@ -40,5 +51,23 @@ public class OrderServiceImpl implements OrderService {
                         dtos.getTotalPages()
                 )
         );
+    }
+
+    @Transactional
+    @Override
+    public OrderDTO createOrder(NewOrderRequest request) {
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
+                () -> new DataNotFoundException("User not found with id " + request.getUserId())
+        );
+        Settlement settlement = settlementRepository.findById(request.getSettlementId()).orElseThrow(
+                () -> new DataNotFoundException("Settlement not found with id " + request.getSettlementId())
+        );
+        Shop shop = shopRepository.findByIdAndIsDeletedFalse(request.getShopId()).orElseThrow(
+                () -> new DataNotFoundException("Shop not found with id " + request.getShopId())
+        );
+        Order orderToSave = orderMapper.toEntity(request, user, settlement, shop);
+        orderRepository.save(orderToSave);
+        return orderMapper.toOrderDto(orderToSave);
+
     }
 }
