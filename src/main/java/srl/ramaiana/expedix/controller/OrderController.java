@@ -37,7 +37,6 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody NewOrderRequest request) {
         log.info("Creating order: {}", request);
