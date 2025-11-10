@@ -7,6 +7,8 @@ import srl.ramaiana.expedix.model.entity.enums.OrderStatusEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -33,5 +35,22 @@ public class Order {
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
     @Column(name = "total_price")
     private BigDecimal totalPrice;
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems = new ArrayList<>();
     private String comment;
+
+    public void calculateTotalPrice() {
+        this.totalPrice = orderItems.stream()
+                .map(OrderItem::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void addOrderItem(Product product, Integer quantity) {
+        OrderItem item = new OrderItem();
+        item.setOrder(Order.this);
+        item.setProduct(product);
+        item.setQuantity(quantity);
+        item.setUnitPrice(product.getUnitPrice());
+    }
+
 }

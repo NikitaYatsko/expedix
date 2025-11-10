@@ -125,12 +125,20 @@ values ('Coca-Cola 0.5L', 'Coca-Cola', 100, 15.00, 'PCS'),
        ('Garlic 1kg', 'Farmer', 100, 80.00, 'PCS'),
        ('Lemons 1kg', 'CitrusLand', 90, 70.00, 'PCS');
 
-
-
-create table expedix.order_products
+CREATE TABLE expedix.order_item
 (
-    order_id   bigint references expedix.orders (id) on delete cascade,
-    product_id bigint references expedix.products (id) on delete cascade,
-    quantity   int not null check (quantity > 0),
-    primary key (order_id, product_id)
+    id          BIGSERIAL PRIMARY KEY NOT NULL,
+    order_id    BIGINT NOT NULL REFERENCES expedix.orders (id) ON DELETE CASCADE,
+    product_id  BIGINT NOT NULL REFERENCES expedix.products (id),
+    quantity    INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
+    unit_price  DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),
+    total_price DECIMAL(10,2) NOT NULL CHECK (total_price >= 0),
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES expedix.orders(id) ON DELETE CASCADE,
+    CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES expedix.products(id)
 );
+
+CREATE INDEX idx_order_item_order_id ON expedix.order_item (order_id);
+CREATE INDEX idx_order_item_product_id ON expedix.order_item (product_id);
+CREATE INDEX idx_order_item_created_at ON expedix.order_item (created_at);
