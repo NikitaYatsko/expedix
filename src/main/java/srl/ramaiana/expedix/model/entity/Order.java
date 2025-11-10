@@ -4,12 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import srl.ramaiana.expedix.model.entity.enums.OrderStatusEnum;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Table(name = "orders", schema = "expedix")

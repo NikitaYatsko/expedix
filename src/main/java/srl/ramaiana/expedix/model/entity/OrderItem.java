@@ -2,11 +2,7 @@ package srl.ramaiana.expedix.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 
 @Entity
 @Table(name = "order_item", schema = "expedix")

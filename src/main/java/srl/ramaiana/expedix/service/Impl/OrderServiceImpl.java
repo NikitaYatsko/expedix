@@ -15,6 +15,11 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.*;
 import srl.ramaiana.expedix.service.OrderService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @RequiredArgsConstructor
 @Service
@@ -69,10 +74,24 @@ public class OrderServiceImpl implements OrderService {
         order.setSettlement(settlement);
         order.setComment(request.getComment());
 
+        List<Long> productIds = new ArrayList<>();
         for (var itemRequest : request.getItems()) {
-            Product product = productRepository.findById(itemRequest.getProductId()).orElseThrow(
-                    () -> new DataNotFoundException("Product not found with id " + itemRequest.getProductId())
-            );
+            productIds.add(itemRequest.getProductId());
+        }
+
+
+        List<Product> allProducts = productRepository.findByIds(productIds);
+        Map<Long, Product> productMap = new HashMap<>();
+        for (Product product : allProducts) {
+            productMap.put(product.getId(), product);
+        }
+
+        for (var itemRequest : request.getItems()) {
+
+            Product product = productMap.get(itemRequest.getProductId());
+            if (product == null) {
+                throw new DataNotFoundException("Product not found with id " + itemRequest.getProductId());
+            }
 
             if (product.getQuantityInStock() < itemRequest.getQuantity()) {
                 throw new DataNotFoundException("Product not enough stock");
@@ -87,7 +106,6 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(order);
 
         return orderMapper.toOrderDto(savedOrder);
-
     }
 
     @Transactional
