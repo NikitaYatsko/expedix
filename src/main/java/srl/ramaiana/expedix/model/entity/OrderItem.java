@@ -9,12 +9,13 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "order_item", schema = "expedix") // Обратите внимание на имя таблицы
+@Table(name = "order_item", schema = "expedix")
 @Data
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
@@ -25,17 +26,13 @@ public class OrderItem {
     private Product product;
 
     @Column(nullable = false)
-    private Integer quantity = 1;
+    private Integer quantity;
 
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
 
     @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
 
     @PrePersist
     @PreUpdate

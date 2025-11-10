@@ -8,19 +8,12 @@ import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.OrderMapper;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
-import srl.ramaiana.expedix.model.entity.Order;
-import srl.ramaiana.expedix.model.entity.Settlement;
-import srl.ramaiana.expedix.model.entity.Shop;
-import srl.ramaiana.expedix.model.entity.User;
+import srl.ramaiana.expedix.model.entity.*;
 import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
-import srl.ramaiana.expedix.repository.OrderRepository;
-import srl.ramaiana.expedix.repository.SettlementRepository;
-import srl.ramaiana.expedix.repository.ShopRepository;
-import srl.ramaiana.expedix.repository.UserRepository;
+import srl.ramaiana.expedix.repository.*;
 import srl.ramaiana.expedix.service.OrderService;
-
 
 
 @RequiredArgsConstructor
@@ -31,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final SettlementRepository settlementRepository;
     private final ShopRepository shopRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public OrderDTO getOrderById(Long id) {
@@ -68,9 +62,31 @@ public class OrderServiceImpl implements OrderService {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(request.getShopId()).orElseThrow(
                 () -> new DataNotFoundException("Shop not found with id " + request.getShopId())
         );
-        Order orderToSave = orderMapper.toEntity(request, user, settlement, shop);
-        Order saved = orderRepository.save(orderToSave);
-        return orderMapper.toOrderDto(saved);
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setShop(shop);
+        order.setSettlement(settlement);
+        order.setComment(request.getComment());
+
+        for (var itemRequest : request.getItems()) {
+            Product product = productRepository.findById(itemRequest.getProductId()).orElseThrow(
+                    () -> new DataNotFoundException("Product not found with id " + itemRequest.getProductId())
+            );
+
+            if (product.getQuantityInStock() < itemRequest.getQuantity()) {
+                throw new DataNotFoundException("Product not enough stock");
+            }
+
+            order.addOrderItem(product, itemRequest.getQuantity());
+            product.setQuantityInStock(product.getQuantityInStock() - itemRequest.getQuantity());
+            productRepository.save(product);
+        }
+
+        order.calculateTotalPrice();
+        Order savedOrder = orderRepository.save(order);
+
+        return orderMapper.toOrderDto(savedOrder);
 
     }
 
