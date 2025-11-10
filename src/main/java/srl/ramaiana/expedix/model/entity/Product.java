@@ -20,6 +20,8 @@ public class Product {
     @Column(name = "brand")
     @NotBlank
     private String brand;
+    @Column(name = "quantity_in_stock")
+    private Integer quantityInStock;
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
     @Enumerated(EnumType.STRING)

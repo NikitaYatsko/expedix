@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import srl.ramaiana.expedix.model.entity.enums.OrderStatusEnum;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -30,5 +31,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
     private String comment;
 }
