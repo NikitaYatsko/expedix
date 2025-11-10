@@ -18,8 +18,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("Select u from User u")
     Page<User> findUsersOnly(Pageable pageable);
 
-
-
     Optional<User> findByIdAndIsDeletedFalse(Integer id);
 
     boolean existsByEmail(String email);

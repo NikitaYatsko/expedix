@@ -1,7 +1,6 @@
 package srl.ramaiana.expedix.service;
 
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.sql.Update;
 import org.springframework.data.domain.Pageable;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 

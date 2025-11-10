@@ -56,8 +56,9 @@ create table expedix.orders
     user_id       int references users (id)       not null,
     settlement_id int references settlements (id) not null,
     shop_id       int references shops (id)       not null,
-    created       timestamp    default current_timestamp,
-    order_status  order_status default 'NEW'      not null,
+    created       timestamp      default current_timestamp,
+    order_status  order_status   default 'NEW'    not null,
+    total_price   decimal(10, 2) default 0,
     comment       text
 );
 
@@ -68,7 +69,15 @@ create table expedix.products
     id           bigserial primary key,
     name         varchar(255) not null,
     brand        varchar(100) not null,
+    quantity_in_stock bigint default 0,
     unit_price   decimal(10, 2),
     type_of_unit type_of_unit not null default 'НЕ УКАЗАНО'
+);
 
+create table expedix.order_products
+(
+    order_id   bigint references expedix.orders (id) on delete cascade,
+    product_id bigint references expedix.products (id) on delete cascade,
+    quantity   int not null check (quantity > 0),
+    primary key (order_id, product_id)
 );

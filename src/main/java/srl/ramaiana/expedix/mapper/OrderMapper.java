@@ -1,6 +1,6 @@
 package srl.ramaiana.expedix.mapper;
 
-import jakarta.validation.constraints.NotNull;
+
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.entity.Order;
@@ -8,7 +8,7 @@ import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.Shop;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
-import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
+
 
 @Component
 public class OrderMapper {
@@ -41,6 +41,6 @@ public class OrderMapper {
         return order;
 
     }
-    
+
 
 }

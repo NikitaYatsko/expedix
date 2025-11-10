@@ -21,7 +21,6 @@ import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.OrderService;
 
-import java.util.List;
 
 
 @RequiredArgsConstructor

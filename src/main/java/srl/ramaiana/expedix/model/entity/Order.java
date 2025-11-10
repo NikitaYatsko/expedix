@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import srl.ramaiana.expedix.model.entity.enums.OrderStatusEnum;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 
 @Data
 @Entity
@@ -31,7 +31,4 @@ public class Order {
     @Column(name = "order_status")
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
     private String comment;
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Product> products;
-
 }

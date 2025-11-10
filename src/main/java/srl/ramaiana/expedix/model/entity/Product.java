@@ -24,7 +24,5 @@ public class Product {
     private BigDecimal unitPrice;
     @Enumerated(EnumType.STRING)
     private UnitTypeEnum typeOfUnit;
-    @ManyToOne
-    private Order order;
 
 }
