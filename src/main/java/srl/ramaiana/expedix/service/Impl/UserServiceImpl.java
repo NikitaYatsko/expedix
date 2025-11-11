@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
@@ -25,6 +26,7 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO findUserById(@NotNull Integer userId) {
@@ -42,9 +44,10 @@ public class UserServiceImpl implements UserService {
         if (!Objects.equals(request.getPassword(), request.getConfirmPassword())) {
             throw new IllegalArgumentException("Passwords do not match!");
         }
-        User user = userMapper.toEntity(request);
-        userRepository.save(user);
-        return userMapper.toDto(user);
+        User userToSave = userMapper.toEntity(request);
+        userToSave.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(userToSave);
+        return userMapper.toDto(userToSave);
     }
 
     @Transactional
