@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
 
             order.addOrderItem(product, itemRequest.getQuantity());
             product.setQuantityInStock(product.getQuantityInStock() - itemRequest.getQuantity());
-            productRepository.save(product);
+
         }
 
         order.calculateTotalPrice();
@@ -116,6 +116,9 @@ public class OrderServiceImpl implements OrderService {
         );
         if (request.getStatus() != null) {
             order.setOrderStatus(request.getStatus());
+        }
+        if (request.getComment() != null) {
+            order.setComment(order.getComment() + ", " + request.getComment());
         }
         return orderMapper.toOrderDto(order);
     }
