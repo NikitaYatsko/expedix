@@ -9,12 +9,14 @@ import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class UserMapper {
 
     private final SettlementMapper settlementMapper;
+    private final RoleMapper roleMapper;
 
 
     public UserOnlyDTO toUserOnlyDTO(User user) {
@@ -29,6 +31,10 @@ public class UserMapper {
         dto.setPersonalCode(user.getPersonalCode());
         dto.setPhoneNumber(user.getPhoneNumber());
         dto.setIsDeleted(user.getIsDeleted());
+        dto.setRoleList(user.getRoles()
+                .stream()
+                .map(roleMapper::toDto)
+                .toList());
         return dto;
 
     }
@@ -49,7 +55,13 @@ public class UserMapper {
 
         userDTO.setSettlementList(user.getSettlementList()
                 .stream()
-                .map(settlementMapper::toSettlementMappedByUser).toList());
+                .map(settlementMapper::toSettlementMappedByUser)
+                .toList());
+
+        userDTO.setRoleList(user.getRoles()
+                .stream()
+                .map(roleMapper::toDto)
+                .toList());
         return userDTO;
     }
 

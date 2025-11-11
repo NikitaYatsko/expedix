@@ -38,6 +38,7 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_roles",
+            schema = "expedix",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )

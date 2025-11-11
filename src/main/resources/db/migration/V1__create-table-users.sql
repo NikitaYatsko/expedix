@@ -27,9 +27,9 @@ create table expedix.shops
 
 
 INSERT INTO expedix.users (personal_code, full_name, phone, password, is_deleted, email)
-VALUES ('1234567890', 'Ivan Cebam', '+37320153456', 'password123', false, 'ivanceban@example.com'),
-       ('0987654321', 'Maria Popa', '+37320234567', 'password456', false, 'mariapopa@example.com'),
-       ('1122334455', 'Alexandru Rusu', '+37320345678', 'password789', false, 'alexrusu@example.com');
+VALUES ('1234567890', 'Ivan Cebam', '+37320153456', '$2a$10$nXWG2gBNXSDxlAPDEdIsQenrkWTXaey5ZbmHRgzngdVHT3cLP4joe', false, 'ivanceban@example.com'),
+       ('0987654321', 'Maria Popa', '+37320234567', '$2a$10$Mrfth6UosxUYhXe9xd1T9', false, 'mariapopa@example.com'),
+       ('1122334455', 'Alexandru Rusu', '+37320345678', '$2a$10$TGH2rr9sRukkS00LmrV1GOfE6Nlt46Df48jwmvUDFRvMIJPGhe4jm', false, 'alexrusu@example.com');
 INSERT INTO expedix.settlements (name, user_id)
 VALUES ('Chisinau', 1),
        ('Balti', 1),
@@ -142,3 +142,16 @@ CREATE TABLE expedix.order_item
 CREATE INDEX idx_order_item_order_id ON expedix.order_item (order_id);
 CREATE INDEX idx_order_item_product_id ON expedix.order_item (product_id);
 CREATE INDEX idx_order_item_created_at ON expedix.order_item (created_at);
+
+create table expedix.roles
+(
+    id               serial primary key not null,
+    name             varchar(50)        not null,
+    user_system_role varchar(64)        not null,
+    active           boolean            not null default true
+);
+create table expedix.user_roles (
+                                    user_id integer references expedix.users(id) on delete cascade,
+                                    role_id integer references expedix.roles(id) on delete cascade,
+                                    primary key (user_id, role_id)
+);

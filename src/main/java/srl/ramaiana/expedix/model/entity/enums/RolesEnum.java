@@ -11,7 +11,8 @@ public enum RolesEnum {
     OPERATOR("OPERATOR"),
     DIRECTOR("DIRECTOR"),
     AGENT("AGENT"),
-    FORWARDER("FORWARDER"),;
+    FORWARDER("FORWARDER"),
+    USER("USER"),;
 
     private final String role;
 
