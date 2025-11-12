@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
+import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
@@ -91,6 +92,23 @@ public class UserMapper {
         if (request.getPhone() != null && !request.getPhone().isBlank()) {
             user.setPhoneNumber(request.getPhone());
         }
+    }
+
+
+    public UserProfileDTO toUserProfileDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+        UserProfileDTO userProfileDTO = new UserProfileDTO();
+        userProfileDTO.setEmail(user.getEmail());
+        userProfileDTO.setFullName(user.getFullName());
+        userProfileDTO.setPersonalCode(user.getPersonalCode());
+        userProfileDTO.setRoles(user.getRoles()
+                .stream()
+                .map(roleMapper::toDto)
+                .collect(Collectors.toList()));
+        userProfileDTO.setPhone(user.getPhoneNumber());
+        return userProfileDTO;
     }
 
 }
