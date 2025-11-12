@@ -5,8 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
@@ -25,6 +29,7 @@ import srl.ramaiana.expedix.service.UserService;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -114,5 +119,23 @@ public class UserServiceImpl implements UserService {
                         dto.getTotalPages()
                 )
         );
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return getUserDetails(email, userRepository);
+    }
+
+    static UserDetails getUserDetails(String email, UserRepository userRepository) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage())
+        );
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
+        );
+
+
     }
 }

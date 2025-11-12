@@ -11,6 +11,7 @@ public enum ApiErrorMessage {
     TOKEN_EXPIRED("Token expired."),
     UNEXPECTED_ERROR_OCCURRED("An unexpected error occurred. Please try again later."),
     INVALID_TOKEN_SIGNATURE("Invalid token signature"),
+    EMAIL_NOT_FOUND("Email: %s not found"),
 
     ;
 
