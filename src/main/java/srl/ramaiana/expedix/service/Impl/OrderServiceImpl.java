@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final SettlementRepository settlementRepository;
     private final ShopRepository shopRepository;
     private final ProductRepository productRepository;
-    private final RoleRepository roleRepository;
+
 
     @Override
     public OrderDTO getOrderById(Long id) {
