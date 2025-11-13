@@ -100,6 +100,7 @@ public class UserMapper {
             return null;
         }
         UserProfileDTO userProfileDTO = new UserProfileDTO();
+        userProfileDTO.setId(user.getId());
         userProfileDTO.setEmail(user.getEmail());
         userProfileDTO.setFullName(user.getFullName());
         userProfileDTO.setPersonalCode(user.getPersonalCode());
