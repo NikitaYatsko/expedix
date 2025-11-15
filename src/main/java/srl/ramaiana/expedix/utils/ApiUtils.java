@@ -1,6 +1,8 @@
 package srl.ramaiana.expedix.utils;
 import jakarta.servlet.http.Cookie;
 
+import java.util.UUID;
+
 
 public class ApiUtils {
     public static Cookie createCookie(String value) {
@@ -11,5 +13,11 @@ public class ApiUtils {
         authorizationCookie.setMaxAge(300);
         return authorizationCookie;
     }
+
+
+    public static String generateUuidWithoutDash(){
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
 
 }
