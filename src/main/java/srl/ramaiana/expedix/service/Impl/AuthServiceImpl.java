@@ -12,10 +12,12 @@ import srl.ramaiana.expedix.exceptions.InvalidDataException;
 import srl.ramaiana.expedix.mapper.UserMapper;
 import srl.ramaiana.expedix.model.dto.user.LoginRequest;
 import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
+import srl.ramaiana.expedix.model.entity.RefreshToken;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.security.JwtTokenProvider;
 import srl.ramaiana.expedix.service.AuthService;
+import srl.ramaiana.expedix.service.RefreshTokenService;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -26,6 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public UserProfileDTO login(@NotNull LoginRequest loginRequest) {
@@ -44,5 +47,15 @@ public class AuthServiceImpl implements AuthService {
         UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(user);
         userProfileDTO.setToken(token);
         return userProfileDTO;
+    }
+
+    @Override
+    public UserProfileDTO refreshAccessToken(String refreshTokenValue) {
+        RefreshToken refreshToken = refreshTokenService.validateAndRefreshToken(refreshTokenValue);
+        User user = refreshToken.getUser();
+        String accessToken = jwtTokenProvider.generateToken(user);
+        UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(user);
+        userProfileDTO.setToken(accessToken);
+        return userMapper.toUserProfileDTO(user);
     }
 }

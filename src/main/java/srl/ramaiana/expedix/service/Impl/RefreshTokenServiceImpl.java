@@ -3,6 +3,8 @@ package srl.ramaiana.expedix.service.Impl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.constants.ApiErrorMessage;
+import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.model.entity.RefreshToken;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.repository.RefreshTokenRepository;
@@ -30,5 +32,16 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             newToken.setCreated(LocalDateTime.now());
             newToken.setToken(ApiUtils.generateUuidWithoutDash());
         });
+    }
+
+    @Override
+    public RefreshToken validateAndRefreshToken(String refreshRefreshToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshRefreshToken).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.NOT_FOUND_REFRESH_TOKEN.getMessage())
+        );
+        refreshToken.setCreated(LocalDateTime.now());
+        refreshToken.setToken(ApiUtils.generateUuidWithoutDash());
+        return refreshTokenRepository.save(refreshToken);
+
     }
 }

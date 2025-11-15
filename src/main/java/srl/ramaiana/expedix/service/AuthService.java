@@ -6,5 +6,6 @@ import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
 public interface AuthService {
 
     UserProfileDTO login(LoginRequest loginRequest);
+    UserProfileDTO refreshAccessToken(String refreshToken);
 
 }
