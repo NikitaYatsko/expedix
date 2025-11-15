@@ -25,6 +25,13 @@ create table expedix.shops
     settlement_id int references expedix.settlements (id)
 );
 
+CREATE TABLE refresh_token (
+                               id SERIAL PRIMARY KEY,
+                               token VARCHAR(128) NOT NULL,
+                               created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                               user_id BIGINT NOT NULL REFERENCES expedix.users(id) ON DELETE CASCADE
+);
+
 
 INSERT INTO expedix.users (personal_code, full_name, phone, password, is_deleted, email)
 VALUES ('1234567890', 'Ivan Cebam', '+37320153456', '$2a$10$nXWG2gBNXSDxlAPDEdIsQenrkWTXaey5ZbmHRgzngdVHT3cLP4joe', false, 'ivanceban@example.com'),
