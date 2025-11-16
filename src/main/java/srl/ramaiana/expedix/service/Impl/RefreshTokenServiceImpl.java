@@ -31,6 +31,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             newToken.setUser(user);
             newToken.setCreated(LocalDateTime.now());
             newToken.setToken(ApiUtils.generateUuidWithoutDash());
+            return  refreshTokenRepository.save(newToken);
         });
     }
 

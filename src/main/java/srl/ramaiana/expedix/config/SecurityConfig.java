@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import srl.ramaiana.expedix.security.JwtRequestFilter;
 import srl.ramaiana.expedix.service.UserService;
-import srl.ramaiana.expedix.service.model.AuthenticationConstants;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +33,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/refresh/token").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )

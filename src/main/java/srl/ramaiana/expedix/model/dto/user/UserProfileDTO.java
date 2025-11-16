@@ -13,6 +13,7 @@ public class UserProfileDTO {
     private String email;
     private String phone;
     private String token;
+    private String refreshToken;
 
     List<RoleDTO> roles;
 

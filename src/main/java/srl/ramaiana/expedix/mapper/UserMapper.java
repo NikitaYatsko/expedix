@@ -8,6 +8,7 @@ import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
+import srl.ramaiana.expedix.service.RefreshTokenService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,6 @@ public class UserMapper {
 
     private final SettlementMapper settlementMapper;
     private final RoleMapper roleMapper;
-
 
     public UserOnlyDTO toUserOnlyDTO(User user) {
         if (user == null) {
@@ -94,22 +94,26 @@ public class UserMapper {
         }
     }
 
-
-    public UserProfileDTO toUserProfileDTO(User user) {
+    public UserProfileDTO toUserProfileDTO(User user, String accessToken, String refreshToken) {
         if (user == null) {
             return null;
         }
-        UserProfileDTO userProfileDTO = new UserProfileDTO();
-        userProfileDTO.setId(user.getId());
-        userProfileDTO.setEmail(user.getEmail());
-        userProfileDTO.setFullName(user.getFullName());
-        userProfileDTO.setPersonalCode(user.getPersonalCode());
-        userProfileDTO.setRoles(user.getRoles()
+
+        UserProfileDTO dto = new UserProfileDTO();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setPersonalCode(user.getPersonalCode());
+        dto.setRoles(user.getRoles()
                 .stream()
                 .map(roleMapper::toDto)
                 .collect(Collectors.toList()));
-        userProfileDTO.setPhone(user.getPhoneNumber());
-        return userProfileDTO;
+        dto.setPhone(user.getPhoneNumber());
+        dto.setToken(accessToken);
+        dto.setRefreshToken(refreshToken);
+
+        return dto;
     }
+
 
 }

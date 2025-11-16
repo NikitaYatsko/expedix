@@ -43,8 +43,9 @@ public class AuthServiceImpl implements AuthService {
                 () -> new InvalidDataException(ApiErrorMessage.INVALID_USER_OR_PASSWORD.getMessage())
         );
 
+        RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(user);
         String token = jwtTokenProvider.generateToken(user);
-        UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(user);
+        UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(user, token, refreshToken.getToken());
         userProfileDTO.setToken(token);
         return userProfileDTO;
     }
@@ -54,8 +55,8 @@ public class AuthServiceImpl implements AuthService {
         RefreshToken refreshToken = refreshTokenService.validateAndRefreshToken(refreshTokenValue);
         User user = refreshToken.getUser();
         String accessToken = jwtTokenProvider.generateToken(user);
-        UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(user);
+        UserProfileDTO userProfileDTO = userMapper.toUserProfileDTO(user, accessToken, refreshToken.getToken());
         userProfileDTO.setToken(accessToken);
-        return userMapper.toUserProfileDTO(user);
+        return userProfileDTO;
     }
 }
