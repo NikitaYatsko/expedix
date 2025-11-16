@@ -6,9 +6,10 @@ import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
 import srl.ramaiana.expedix.model.entity.User;
-import srl.ramaiana.expedix.model.request.user.NewUserRequest;
+
+import srl.ramaiana.expedix.model.request.user.RegistrationUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
-import srl.ramaiana.expedix.service.RefreshTokenService;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public class UserMapper {
         return userDTO;
     }
 
-    public User toEntity(NewUserRequest request) {
+    public User toEntity(RegistrationUserRequest request) {
         if (request == null) {
             return null;
         }
@@ -74,7 +75,7 @@ public class UserMapper {
         user.setEmail(request.getEmail());
         user.setFullName(request.getFullName());
         user.setPassword(request.getPassword());
-        user.setPhoneNumber(request.getPhone());
+        user.setPhoneNumber(request.getPhoneNumber());
         user.setPersonalCode(null);
         user.setSettlementList(List.of());
         return user;
@@ -93,6 +94,11 @@ public class UserMapper {
             user.setPhoneNumber(request.getPhone());
         }
     }
+
+
+
+
+
 
     public UserProfileDTO toUserProfileDTO(User user, String accessToken, String refreshToken) {
         if (user == null) {

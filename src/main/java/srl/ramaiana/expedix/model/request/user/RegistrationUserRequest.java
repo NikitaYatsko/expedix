@@ -1,0 +1,29 @@
+package srl.ramaiana.expedix.model.request.user;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+@Data
+public class RegistrationUserRequest {
+
+    @NotBlank
+    private String fullName;
+
+    @NotBlank
+    @Email
+    private String email;
+
+    @NotBlank
+    private String phoneNumber;
+
+    @NotBlank
+    @Size(min = 6)
+    private String password;
+
+    @NotBlank
+    @Size(min = 6)
+    private String confirmPassword;
+}

@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import srl.ramaiana.expedix.model.dto.user.LoginRequest;
+import srl.ramaiana.expedix.model.request.user.LoginRequest;
 import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
+import srl.ramaiana.expedix.model.request.user.RegistrationUserRequest;
 import srl.ramaiana.expedix.service.AuthService;
 import srl.ramaiana.expedix.utils.ApiUtils;
 
@@ -40,5 +41,15 @@ public class AuthController {
         response.addCookie(authorizationCookie);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationUserRequest request, HttpServletResponse response) {
+        log.info("Register Request: {}", request);
+        UserProfileDTO result = authService.registerUser(request);
+        Cookie authorizationCookie = ApiUtils.createCookie(result.getToken());
+        response.addCookie(authorizationCookie);
+        return ResponseEntity.ok(result);
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package srl.ramaiana.expedix.model.dto.user;
+package srl.ramaiana.expedix.model.request.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

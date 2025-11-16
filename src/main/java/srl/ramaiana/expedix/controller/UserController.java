@@ -1,6 +1,6 @@
 package srl.ramaiana.expedix.controller;
 
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
-import srl.ramaiana.expedix.model.request.user.NewUserRequest;
+
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.OrderService;
@@ -63,11 +63,6 @@ public class UserController {
         return ResponseEntity.ok(orderService.findAllByUser(userId, pageable));
     }
 
-    @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid NewUserRequest request) {
-        log.info("Creating new user: {}", request);
-        return ResponseEntity.ok(userService.createUser(request));
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody UpdateUserRequest request) {

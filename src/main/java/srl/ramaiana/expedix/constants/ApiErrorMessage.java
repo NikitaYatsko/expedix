@@ -16,6 +16,8 @@ public enum ApiErrorMessage {
     INVALID_USER_OR_PASSWORD("Invalid email or password. Try again"),
     INVALID_USER_REGISTRATION_STATUS("Invalid user registration status: %s. "),
     NOT_FOUND_REFRESH_TOKEN("Refresh token not found."),
+    EMAIL_ALREADY_EXISTS("Email already exists"),
+    USER_ROLE_NOT_FOUND("Role not found"),
 
     ;
 

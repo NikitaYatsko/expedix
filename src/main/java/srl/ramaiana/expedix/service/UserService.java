@@ -6,15 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
-import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 
 public interface UserService extends UserDetailsService {
     UserDTO findUserById(@NotNull Integer userId);
-    UserDTO createUser(@NotNull NewUserRequest request);
+
     UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request);
+
     void deleteUser(@NotNull Integer userId);
+
     PaginationResponse<UserDTO> getAllUsers(Pageable pageable);
+
     PaginationResponse<UserOnlyDTO> getOnlyUsers(Pageable pageable);
 }

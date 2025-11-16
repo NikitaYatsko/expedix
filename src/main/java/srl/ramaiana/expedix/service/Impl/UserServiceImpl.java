@@ -8,27 +8,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.constants.ApiErrorMessage;
-import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
-import srl.ramaiana.expedix.model.entity.Role;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
-import srl.ramaiana.expedix.model.entity.enums.RolesEnum;
-import srl.ramaiana.expedix.model.request.user.NewUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
-import srl.ramaiana.expedix.repository.RoleRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
-
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,8 +26,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+
 
     @Override
     public UserDTO findUserById(@NotNull Integer userId) {
@@ -45,28 +34,6 @@ public class UserServiceImpl implements UserService {
                 () -> new DataNotFoundException("User not found!")
         );
         return userMapper.toDto(user);
-    }
-
-    @Override
-    public UserDTO createUser(NewUserRequest request) {
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new DataExistsException("Email already exists!");
-        }
-        if (!Objects.equals(request.getPassword(), request.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match!");
-        }
-
-        Role userRole = roleRepository.findByName(RolesEnum.USER.getRole()).orElseThrow(
-                () -> new DataNotFoundException("Role not found!")
-        );
-
-        User userToSave = userMapper.toEntity(request);
-        userToSave.setPassword(passwordEncoder.encode(request.getPassword()));
-        Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        userToSave.setRoles(roles);
-        userRepository.save(userToSave);
-        return userMapper.toDto(userToSave);
     }
 
     @Transactional
