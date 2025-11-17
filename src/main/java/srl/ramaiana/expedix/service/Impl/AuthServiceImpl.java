@@ -12,6 +12,7 @@ import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.exceptions.InvalidDataException;
+import srl.ramaiana.expedix.exceptions.InvalidPasswordException;
 import srl.ramaiana.expedix.mapper.UserMapper;
 import srl.ramaiana.expedix.model.entity.Role;
 import srl.ramaiana.expedix.model.entity.enums.RolesEnum;
@@ -25,6 +26,7 @@ import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.security.JwtTokenProvider;
 import srl.ramaiana.expedix.service.AuthService;
 import srl.ramaiana.expedix.service.RefreshTokenService;
+import srl.ramaiana.expedix.utils.PasswordUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -82,6 +84,17 @@ public class AuthServiceImpl implements AuthService {
         Role role = roleRepository.findByUserSystemRole(RolesEnum.USER).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.USER_ROLE_NOT_FOUND.getMessage())
         );
+
+        String password = registrationUserRequest.getPassword();
+        String confirmPassword = registrationUserRequest.getConfirmPassword();
+
+        if (!password.equals(confirmPassword)) {
+            throw new InvalidPasswordException(ApiErrorMessage.INVALID_PASSWORD.getMessage());
+        }
+
+        if (PasswordUtils.isNotValidPassword(password)) {
+            throw new InvalidPasswordException(ApiErrorMessage.INVALID_PASSWORD.getMessage());
+        }
 
         User newUser = userMapper.toEntity(registrationUserRequest);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
