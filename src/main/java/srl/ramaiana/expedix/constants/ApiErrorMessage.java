@@ -2,6 +2,7 @@ package srl.ramaiana.expedix.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import srl.ramaiana.expedix.model.constants.ApiConstants;
 
 @Getter
 @AllArgsConstructor
@@ -18,6 +19,12 @@ public enum ApiErrorMessage {
     NOT_FOUND_REFRESH_TOKEN("Refresh token not found."),
     EMAIL_ALREADY_EXISTS("Email already exists"),
     USER_ROLE_NOT_FOUND("Role not found"),
+    MISMATCH_PASSWORDS("Password does not match"),
+    INVALID_PASSWORD("Invalid password. It must have: "
+            + "length at least " + ApiConstants.REQUIRED_MIN_PASSWORD_LENGTH + ", including "
+            + ApiConstants.REQUIRED_MIN_LETTERS_NUMBER_EVERY_CASE_IN_PASSWORD + " letter(s) in upper and lower cases, "
+            + ApiConstants.REQUIRED_MIN_CHARACTERS_NUMBER_IN_PASSWORD + " character(s), "
+            + ApiConstants.REQUIRED_MIN_DIGITS_NUMBER_IN_PASSWORD + " digit(s). "),
 
     ;
 
