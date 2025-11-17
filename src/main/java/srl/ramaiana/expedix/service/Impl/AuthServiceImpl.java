@@ -24,6 +24,7 @@ import srl.ramaiana.expedix.model.request.user.RegistrationUserRequest;
 import srl.ramaiana.expedix.repository.RoleRepository;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.security.JwtTokenProvider;
+import srl.ramaiana.expedix.security.validation.AccessValidator;
 import srl.ramaiana.expedix.service.AuthService;
 import srl.ramaiana.expedix.service.RefreshTokenService;
 import srl.ramaiana.expedix.utils.PasswordUtils;
@@ -43,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccessValidator accessValidator;
 
     @Override
     public UserProfileDTO login(@NotNull LoginRequest loginRequest) {
@@ -76,25 +78,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserProfileDTO registerUser(@NotNull RegistrationUserRequest registrationUserRequest) {
-        if (userRepository.existsByEmail(registrationUserRequest.getEmail())) {
-            throw new DataExistsException(ApiErrorMessage.EMAIL_ALREADY_EXISTS
-                    .getMessage(registrationUserRequest.getEmail()));
-        }
+        accessValidator.validateNewUser(
+                registrationUserRequest.getEmail(),
+                registrationUserRequest.getPassword(),
+                registrationUserRequest.getConfirmPassword()
+        );
+
 
         Role role = roleRepository.findByUserSystemRole(RolesEnum.USER).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.USER_ROLE_NOT_FOUND.getMessage())
         );
-
-        String password = registrationUserRequest.getPassword();
-        String confirmPassword = registrationUserRequest.getConfirmPassword();
-
-        if (!password.equals(confirmPassword)) {
-            throw new InvalidPasswordException(ApiErrorMessage.INVALID_PASSWORD.getMessage());
-        }
-
-        if (PasswordUtils.isNotValidPassword(password)) {
-            throw new InvalidPasswordException(ApiErrorMessage.INVALID_PASSWORD.getMessage());
-        }
 
         User newUser = userMapper.toEntity(registrationUserRequest);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
