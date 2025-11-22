@@ -13,6 +13,7 @@ import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.*;
+import srl.ramaiana.expedix.security.validation.AccessValidator;
 import srl.ramaiana.expedix.service.OrderService;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final SettlementRepository settlementRepository;
     private final ShopRepository shopRepository;
     private final ProductRepository productRepository;
+    private final AccessValidator accessValidator;
 
 
     @Override
@@ -36,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Order not found with id " + id)
         );
+        accessValidator.validateDirectorOrOwnerAccess(order.getUser().getEmail());
         return orderMapper.toOrderDto(order);
     }
 
@@ -58,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDTO createOrder(String username, NewOrderRequest request) {
-        User user = userRepository.findByFullName(username).orElseThrow(
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(username).orElseThrow(
                 () -> new DataNotFoundException("User not found with name " + username)
         );
         Settlement settlement = settlementRepository.findById(request.getSettlementId()).orElseThrow(

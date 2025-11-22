@@ -1,5 +1,8 @@
 package srl.ramaiana.expedix.utils;
+
 import jakarta.servlet.http.Cookie;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.UUID;
 
@@ -15,9 +18,12 @@ public class ApiUtils {
     }
 
 
-    public static String generateUuidWithoutDash(){
+    public static String generateUuidWithoutDash() {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
+    public static String getCurrentUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
 
 }

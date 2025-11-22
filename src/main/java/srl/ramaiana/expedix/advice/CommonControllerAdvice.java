@@ -9,6 +9,7 @@ import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.exceptions.InvalidPasswordException;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -65,5 +66,18 @@ public class CommonControllerAdvice {
                 HttpStatus.BAD_REQUEST.value()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPasswordException(AccessDeniedException ex) {
+        log.warn("User tried to access forbidden resource", ex);
+
+
+        ErrorResponse error = new ErrorResponse(
+                LocalDateTime.now(),
+                "Access denied",
+                HttpStatus.FORBIDDEN.value()
+        );
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 }

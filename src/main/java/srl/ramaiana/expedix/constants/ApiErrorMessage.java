@@ -20,6 +20,7 @@ public enum ApiErrorMessage {
     EMAIL_ALREADY_EXISTS("Email already exists"),
     USER_ROLE_NOT_FOUND("Role not found"),
     MISMATCH_PASSWORDS("Password does not match"),
+    ACCESS_DENIED("Access denied. You don't have enough rights to perform this operation."),
     INVALID_PASSWORD("Invalid password. It must have: "
             + "length at least " + ApiConstants.REQUIRED_MIN_PASSWORD_LENGTH + ", including "
             + ApiConstants.REQUIRED_MIN_LETTERS_NUMBER_EVERY_CASE_IN_PASSWORD + " letter(s) in upper and lower cases, "
