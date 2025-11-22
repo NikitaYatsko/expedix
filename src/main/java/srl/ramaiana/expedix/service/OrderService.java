@@ -11,8 +11,12 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 
 public interface OrderService {
     OrderDTO getOrderById(Long id);
+
     PaginationResponse<OrderDTO> getOrders(Pageable pageable);
-    OrderDTO createOrder(@NotNull NewOrderRequest request);
+
+    OrderDTO createOrder(@NotNull String username, @NotNull NewOrderRequest request);
+
     OrderDTO updateOrder(@NotNull Long id, @NotNull UpdateOrderDTO request);
-    PaginationResponse<OrderDTO> findAllByUser(Integer userId, Pageable pageable);
+
+    PaginationResponse<OrderDTO> findAllByUser(@NotNull Integer userId, Pageable pageable);
 }

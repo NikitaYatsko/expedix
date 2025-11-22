@@ -55,11 +55,7 @@ public class SettlementController {
     public ResponseEntity<SettlementDTO> saveSettlement(
             @RequestBody NewSettlementRequest request) {
 
-        //TODO replace with real user,
-        int id = 1;
-        log.info("Saving settlement {} for user {}", request, id);
-
-        SettlementDTO dto = settlementService.createSettlement(id, request);
+        SettlementDTO dto = settlementService.createSettlement(request);
         return ResponseEntity.ok(dto);
     }
 

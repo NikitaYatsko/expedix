@@ -13,6 +13,8 @@ import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.OrderService;
 
+import java.security.Principal;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,9 +40,9 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody NewOrderRequest request) {
+    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody NewOrderRequest request, Principal principal) {
         log.info("Creating order: {}", request);
-        return ResponseEntity.ok(orderService.createOrder(request));
+        return ResponseEntity.ok(orderService.createOrder(principal.getName(), request));
     }
 
     @PutMapping("/{id}")

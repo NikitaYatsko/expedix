@@ -57,9 +57,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public OrderDTO createOrder(NewOrderRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(
-                () -> new DataNotFoundException("User not found with id " + request.getUserId())
+    public OrderDTO createOrder(String username, NewOrderRequest request) {
+        User user = userRepository.findByFullName(username).orElseThrow(
+                () -> new DataNotFoundException("User not found with name " + username)
         );
         Settlement settlement = settlementRepository.findById(request.getSettlementId()).orElseThrow(
                 () -> new DataNotFoundException("Settlement not found with id " + request.getSettlementId())

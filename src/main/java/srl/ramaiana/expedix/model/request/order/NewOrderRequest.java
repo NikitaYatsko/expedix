@@ -8,8 +8,6 @@ import java.util.List;
 @Data
 public class NewOrderRequest {
     @NotNull
-    private Integer userId;
-    @NotNull
     private Integer settlementId;
     @NotNull
     private Integer shopId;

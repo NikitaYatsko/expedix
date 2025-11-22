@@ -12,7 +12,7 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 public interface SettlementService {
     SettlementDTO getSettlementById(@NotNull Integer id);
 
-    SettlementDTO createSettlement(@NotNull Integer id, @NotNull NewSettlementRequest settlementRequest);
+    SettlementDTO createSettlement(@NotNull NewSettlementRequest settlementRequest);
 
     SettlementDTO updateSettlement(@NotNull Integer id, @NotNull UpdateSettlementRequest settlementRequest);
 

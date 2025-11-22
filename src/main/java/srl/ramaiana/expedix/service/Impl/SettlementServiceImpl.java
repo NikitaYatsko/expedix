@@ -26,7 +26,6 @@ import srl.ramaiana.expedix.service.SettlementService;
 public class SettlementServiceImpl implements SettlementService {
     private final SettlementRepository settlementRepository;
     private final SettlementMapper settlementMapper;
-    private final UserRepository userRepository;
 
     @Override
     public SettlementDTO getSettlementById(Integer id) {
@@ -35,16 +34,15 @@ public class SettlementServiceImpl implements SettlementService {
         );
         return settlementMapper.toDto(settlement);
     }
+
     @Transactional
     @Override
-    public SettlementDTO createSettlement(@NotNull Integer id, @NotNull NewSettlementRequest settlementRequest) {
+    public SettlementDTO createSettlement(@NotNull NewSettlementRequest settlementRequest) {
         if (settlementRepository.existsByName(settlementRequest.getName())) {
             throw new DataExistsException("settlement with name " + settlementRequest.getName() + " already exists");
         }
-        User user = userRepository.findByIdAndIsDeletedFalse(id).orElseThrow(
-                () -> new DataNotFoundException("user with id " + id + " not found")
-        );
-        Settlement settlement = settlementMapper.toEntity(settlementRequest, user);
+
+        Settlement settlement = settlementMapper.toEntity(settlementRequest);
         return settlementMapper.toDto(settlement);
 
     }
@@ -55,10 +53,7 @@ public class SettlementServiceImpl implements SettlementService {
         Settlement settlement = settlementRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("Settlement with id " + id + " not found"));
 
-        User user = userRepository.findByIdAndIsDeletedFalse(settlementRequest.getUserId())
-                .orElseThrow(() -> new DataNotFoundException("User with id " + settlementRequest.getUserId() + " not found"));
-
-        Settlement settlementToSave = settlementMapper.updateSettlement(settlementRequest, settlement, user);
+        Settlement settlementToSave = settlementMapper.updateSettlement(settlementRequest, settlement);
         Settlement savedSettlement = settlementRepository.save(settlementToSave);
 
         return settlementMapper.toDto(savedSettlement);
