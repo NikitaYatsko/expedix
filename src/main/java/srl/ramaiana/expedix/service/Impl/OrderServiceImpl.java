@@ -46,8 +46,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PaginationResponse<OrderDTO> getOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
-        Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
-ф        accessValidator.validateDirectorOrOwnerAccess(orders.getContent().getFirst().getUser().getEmail());
+        Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);accessValidator.validateDirectorOrOwnerAccess(orders.getContent().getFirst().getUser().getEmail());
         return new PaginationResponse<>(
                 dtos.getContent(),
                 new PaginationResponse.Pagination(
