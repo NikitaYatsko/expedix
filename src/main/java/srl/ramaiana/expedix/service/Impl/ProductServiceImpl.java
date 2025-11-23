@@ -11,7 +11,6 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.ProductRepository;
 import srl.ramaiana.expedix.service.ProductService;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service

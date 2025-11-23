@@ -27,7 +27,6 @@ import srl.ramaiana.expedix.security.JwtTokenProvider;
 import srl.ramaiana.expedix.security.validation.AccessValidator;
 import srl.ramaiana.expedix.service.AuthService;
 import srl.ramaiana.expedix.service.RefreshTokenService;
-import srl.ramaiana.expedix.utils.PasswordUtils;
 
 import java.util.HashSet;
 import java.util.Set;

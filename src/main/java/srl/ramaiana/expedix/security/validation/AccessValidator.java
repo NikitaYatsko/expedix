@@ -8,7 +8,6 @@ import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.exceptions.InvalidPasswordException;
 import srl.ramaiana.expedix.model.entity.User;
-import srl.ramaiana.expedix.model.entity.enums.RolesEnum;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.utils.ApiUtils;
 import srl.ramaiana.expedix.utils.PasswordUtils;

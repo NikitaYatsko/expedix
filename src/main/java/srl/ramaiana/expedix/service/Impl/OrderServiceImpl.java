@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
     public PaginationResponse<OrderDTO> getOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
         Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
+ф        accessValidator.validateDirectorOrOwnerAccess(orders.getContent().getFirst().getUser().getEmail());
         return new PaginationResponse<>(
                 dtos.getContent(),
                 new PaginationResponse.Pagination(
@@ -117,6 +118,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Order not found with id " + id)
         );
+        accessValidator.validateDirectorOrOwnerAccess(order.getUser().getEmail());
         if (request.getStatus() != null) {
             order.setOrderStatus(request.getStatus());
         }
