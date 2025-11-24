@@ -72,12 +72,5 @@ public class ShopServiceImpl implements ShopService {
     }
 
 
-   /* @Override
-    public List<ShopDTO> getAllShops() {
-        List<Shop> shops = shopRepository.findAll();
-        return shops.stream()
-                .map(shopMapper::toDto)
-                .collect(Collectors.toList());
-    }*/
 
 }

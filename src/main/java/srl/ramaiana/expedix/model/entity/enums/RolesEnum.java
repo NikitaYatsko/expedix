@@ -8,11 +8,12 @@ import java.util.Arrays;
 @Getter
 @AllArgsConstructor
 public enum RolesEnum {
-    OPERATOR("OPERATOR"),
-    DIRECTOR("DIRECTOR"),
-    AGENT("AGENT"),
-    FORWARDER("FORWARDER"),
-    USER("USER"),;
+    DIRECTOR("Директор"),
+    OPERATOR("Оператор"),
+    AGENT("Агент"),
+    FORWARDER("Экспедитор"),
+    USER("Пользователь");
+
 
     private final String role;
 

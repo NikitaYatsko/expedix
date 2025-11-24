@@ -43,6 +43,28 @@ public class AccessValidator {
         return user.getRoles().stream().anyMatch(role -> role.getName().equals("Директор"));
     }
 
+    public boolean isOperator(String email) {
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
+        );
+        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Оператор"));
+    }
+
+    public boolean isAgent(String email) {
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
+        );
+        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Агент"));
+    }
+
+    public boolean isForwarder(String email) {
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
+        );
+        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Экспедитор"));
+    }
+
+
     @SneakyThrows
     public void validateDirectorOrOwnerAccess(String email) {
         String currentEmail = ApiUtils.getCurrentUsername();
@@ -52,5 +74,18 @@ public class AccessValidator {
             throw new AccessDeniedException(ApiErrorMessage.ACCESS_DENIED.getMessage());
         }
     }
+
+    @SneakyThrows
+    public void validateProductReadAccess() {
+        String currentEmail = ApiUtils.getCurrentUsername();
+
+        if (isDirector(currentEmail)) return;
+        if (isOperator(currentEmail)) return;
+        if (isForwarder(currentEmail)) return;
+        if (isAgent(currentEmail)) return;
+
+        throw new AccessDeniedException("Нет доступа!");
+    }
+
 
 }

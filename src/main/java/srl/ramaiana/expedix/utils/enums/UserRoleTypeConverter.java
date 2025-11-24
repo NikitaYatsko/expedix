@@ -9,11 +9,12 @@ public class UserRoleTypeConverter implements AttributeConverter<RolesEnum, Stri
 
     @Override
     public String convertToDatabaseColumn(RolesEnum attribute) {
-        return attribute != null ? attribute.getRole() : null;
+
+        return attribute != null ? attribute.name() : null;
     }
 
     @Override
     public RolesEnum convertToEntityAttribute(String dbData) {
-        return dbData != null ? RolesEnum.fromRole(dbData) : null;
+        return dbData != null ? RolesEnum.valueOf(dbData) : null;
     }
 }
