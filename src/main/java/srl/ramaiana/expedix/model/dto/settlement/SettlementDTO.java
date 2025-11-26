@@ -10,6 +10,5 @@ import java.util.List;
 public class SettlementDTO {
     private Integer id;
     private String name;
-    private String assignedTo;
     private List<ShopMappedBySettlementDTO> shopList = new ArrayList<>();
 }

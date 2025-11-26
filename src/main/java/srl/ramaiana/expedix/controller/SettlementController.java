@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
-import srl.ramaiana.expedix.model.dto.settlement.SettlementOnlyDTO;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
@@ -28,17 +27,6 @@ public class SettlementController {
         return ResponseEntity.ok(settlementService.getSettlementById(id));
     }
 
-    @GetMapping("/only")
-    public ResponseEntity<PaginationResponse<SettlementOnlyDTO>> getOnlySettlements(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        log.info("Getting only settlements");
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(settlementService.getOnlySettlements(pageable));
-
-
-    }
 
     @GetMapping
     public ResponseEntity<PaginationResponse<SettlementDTO>> getAllSettlements(
@@ -49,7 +37,6 @@ public class SettlementController {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(settlementService.getAllSettlements(pageable));
     }
-
 
     @PostMapping
     public ResponseEntity<SettlementDTO> saveSettlement(

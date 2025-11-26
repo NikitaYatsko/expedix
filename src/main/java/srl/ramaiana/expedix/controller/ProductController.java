@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import srl.ramaiana.expedix.model.dto.product.ProductDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
+import srl.ramaiana.expedix.security.validation.AccessValidator;
 import srl.ramaiana.expedix.service.ProductService;
 
 @RequiredArgsConstructor
@@ -17,12 +18,14 @@ import srl.ramaiana.expedix.service.ProductService;
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
+    private final AccessValidator accessValidator;
 
     @GetMapping
     public ResponseEntity<PaginationResponse<ProductDTO>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
+        accessValidator.validateProductReadAccess();
         Pageable pageable = PageRequest.of(page, size);
         PaginationResponse<ProductDTO> response = productService.findAllProduct(pageable);
         return ResponseEntity.ok(response);

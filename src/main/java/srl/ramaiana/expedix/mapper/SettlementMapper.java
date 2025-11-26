@@ -3,8 +3,6 @@ package srl.ramaiana.expedix.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.settlement.SettlementDTO;
-import srl.ramaiana.expedix.model.dto.settlement.SettlementMappedByUserDTO;
-import srl.ramaiana.expedix.model.dto.settlement.SettlementOnlyDTO;
 import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.request.settlement.NewSettlementRequest;
 import srl.ramaiana.expedix.model.request.settlement.UpdateSettlementRequest;
@@ -27,11 +25,6 @@ public class SettlementMapper {
         SettlementDTO settlementDTO = new SettlementDTO();
         settlementDTO.setId(settlement.getId());
         settlementDTO.setName(settlement.getName());
-        if (settlement.getUser() != null) {
-            settlementDTO.setAssignedTo("Агент: " + settlement.getUser().getFullName());
-        } else {
-            settlementDTO.setAssignedTo("Не назначено");
-        }
         settlementDTO.setShopList(settlement.getShops() != null ?
                 settlement.getShops()
                         .stream()
@@ -62,10 +55,10 @@ public class SettlementMapper {
         return settlement;
     }
 
-    public SettlementMappedByUserDTO toSettlementMappedByUser(Settlement settlement) {
+    public SettlementDTO toSettlementMappedByUser(Settlement settlement) {
         if (settlement == null) return null;
 
-        SettlementMappedByUserDTO settlementMappedByUserDTO = new SettlementMappedByUserDTO();
+        SettlementDTO settlementMappedByUserDTO = new SettlementDTO();
         settlementMappedByUserDTO.setId(settlement.getId());
         settlementMappedByUserDTO.setName(settlement.getName());
         settlementMappedByUserDTO.setShopList(settlement.getShops() != null ?
@@ -74,19 +67,6 @@ public class SettlementMapper {
                         .map(shopMapper::toMappedBySettlementDto).collect(Collectors.toList()) :
                 new ArrayList<>());
         return settlementMappedByUserDTO;
-    }
-
-    public SettlementOnlyDTO toSettlementOnly(Settlement settlement) {
-        if (settlement == null) return null;
-        SettlementOnlyDTO settlementOnlyDTO = new SettlementOnlyDTO();
-        settlementOnlyDTO.setId(settlement.getId());
-        settlementOnlyDTO.setName(settlement.getName());
-        if (settlement.getUser() != null) {
-            settlementOnlyDTO.setAssignedTo("Агент: " + settlement.getUser().getFullName());
-        } else {
-            settlementOnlyDTO.setAssignedTo("Не назначено");
-        }
-        return settlementOnlyDTO;
     }
 
 }

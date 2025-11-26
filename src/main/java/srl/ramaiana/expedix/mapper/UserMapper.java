@@ -10,36 +10,13 @@ import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.request.user.RegistrationUserRequest;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 
-
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
 public class UserMapper {
 
-    private final SettlementMapper settlementMapper;
     private final RoleMapper roleMapper;
-
-    public UserOnlyDTO toUserOnlyDTO(User user) {
-        if (user == null) {
-            return null;
-        }
-        UserOnlyDTO dto = new UserOnlyDTO();
-
-        dto.setUserId(user.getId());
-        dto.setEmail(user.getEmail());
-        dto.setFullName(user.getFullName());
-        dto.setPersonalCode(user.getPersonalCode());
-        dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setIsDeleted(user.getIsDeleted());
-        dto.setRoleList(user.getRoles()
-                .stream()
-                .map(roleMapper::toDto)
-                .toList());
-        return dto;
-
-    }
 
     public UserDTO toDto(User user) {
 
@@ -48,18 +25,11 @@ public class UserMapper {
         }
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getId());
         userDTO.setEmail(user.getEmail());
         userDTO.setFullName(user.getFullName());
         userDTO.setPersonalCode(user.getPersonalCode());
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setIsDeleted(user.getIsDeleted());
-
-        userDTO.setSettlementList(user.getSettlementList()
-                .stream()
-                .map(settlementMapper::toSettlementMappedByUser)
-                .toList());
-
         userDTO.setRoleList(user.getRoles()
                 .stream()
                 .map(roleMapper::toDto)
@@ -77,7 +47,6 @@ public class UserMapper {
         user.setPassword(request.getPassword());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setPersonalCode(null);
-        user.setSettlementList(List.of());
         return user;
     }
 
@@ -94,11 +63,6 @@ public class UserMapper {
             user.setPhoneNumber(request.getPhone());
         }
     }
-
-
-
-
-
 
     public UserProfileDTO toUserProfileDTO(User user, String accessToken, String refreshToken) {
         if (user == null) {

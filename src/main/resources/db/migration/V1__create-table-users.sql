@@ -11,9 +11,8 @@ CREATE TABLE expedix.users
 
 create table expedix.settlements
 (
-    id      SERIAL PRIMARY KEY,
-    name    varchar(100) not null,
-    user_id int          references expedix.users (id) on delete set null
+    id   SERIAL PRIMARY KEY,
+    name varchar(100) not null
 );
 
 create table expedix.shops
@@ -25,24 +24,28 @@ create table expedix.shops
     settlement_id int references expedix.settlements (id)
 );
 
-CREATE TABLE refresh_token (
-                               id SERIAL PRIMARY KEY,
-                               token VARCHAR(128) NOT NULL,
-                               created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                               user_id BIGINT NOT NULL REFERENCES expedix.users(id) ON DELETE CASCADE
+CREATE TABLE refresh_token
+(
+    id      SERIAL PRIMARY KEY,
+    token   VARCHAR(128) NOT NULL,
+    created TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    user_id BIGINT       NOT NULL REFERENCES expedix.users (id) ON DELETE CASCADE
 );
 
 
 INSERT INTO expedix.users (personal_code, full_name, phone, password, is_deleted, email)
-VALUES ('1234567890', 'Ivan Cebam', '+37320153456', '$2a$10$nXWG2gBNXSDxlAPDEdIsQenrkWTXaey5ZbmHRgzngdVHT3cLP4joe', false, 'ivanceban@example.com'),
+VALUES ('1234567890', 'Ivan Cebam', '+37320153456', '$2a$10$nXWG2gBNXSDxlAPDEdIsQenrkWTXaey5ZbmHRgzngdVHT3cLP4joe',
+        false, 'ivanceban@example.com'),
        ('0987654321', 'Maria Popa', '+37320234567', '$2a$10$Mrfth6UosxUYhXe9xd1T9', false, 'mariapopa@example.com'),
-       ('1122334455', 'Alexandru Rusu', '+37320345678', '$2a$10$TGH2rr9sRukkS00LmrV1GOfE6Nlt46Df48jwmvUDFRvMIJPGhe4jm', false, 'alexrusu@example.com');
-INSERT INTO expedix.settlements (name, user_id)
-VALUES ('Chisinau', 1),
-       ('Balti', 1),
-       ('Cahul', 2),
-       ('Tiraspol', 3),
-       ('Orhei', NULL);
+       ('1122334455', 'Alexandru Rusu', '+37320345678', '$2a$10$TGH2rr9sRukkS00LmrV1GOfE6Nlt46Df48jwmvUDFRvMIJPGhe4jm',
+        false, 'alexrusu@example.com');
+
+INSERT INTO expedix.settlements (name)
+VALUES ('Chisinau'),
+       ('Balti'),
+       ('Cahul'),
+       ('Tiraspol'),
+       ('Orhei');
 
 
 INSERT INTO expedix.shops (name, address, is_deleted, settlement_id)
@@ -71,6 +74,7 @@ create table expedix.orders
 
 
 CREATE TYPE expedix.type_of_unit AS ENUM ('PCS', 'UPC', 'BOX', 'NOT_SPECIFIED');
+
 create table expedix.products
 (
     id                bigserial primary key,
@@ -135,15 +139,15 @@ values ('Coca-Cola 0.5L', 'Coca-Cola', 100, 15.00, 'PCS'),
 CREATE TABLE expedix.order_item
 (
     id          BIGSERIAL PRIMARY KEY NOT NULL,
-    order_id    BIGINT NOT NULL REFERENCES expedix.orders (id) ON DELETE CASCADE,
-    product_id  BIGINT NOT NULL REFERENCES expedix.products (id),
-    quantity    INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
-    unit_price  DECIMAL(10,2) NOT NULL CHECK (unit_price >= 0),
-    total_price DECIMAL(10,2) NOT NULL CHECK (total_price >= 0),
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    order_id    BIGINT                NOT NULL REFERENCES expedix.orders (id) ON DELETE CASCADE,
+    product_id  BIGINT                NOT NULL REFERENCES expedix.products (id),
+    quantity    INT                   NOT NULL DEFAULT 1 CHECK (quantity > 0),
+    unit_price  DECIMAL(10, 2)        NOT NULL CHECK (unit_price >= 0),
+    total_price DECIMAL(10, 2)        NOT NULL CHECK (total_price >= 0),
+    created_at  TIMESTAMP                      DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES expedix.orders(id) ON DELETE CASCADE,
-    CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES expedix.products(id)
+    CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES expedix.orders (id) ON DELETE CASCADE,
+    CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES expedix.products (id)
 );
 
 CREATE INDEX idx_order_item_order_id ON expedix.order_item (order_id);
@@ -157,8 +161,9 @@ create table expedix.roles
     user_system_role varchar(64)        not null,
     active           boolean            not null default true
 );
-create table expedix.user_roles (
-                                    user_id integer references expedix.users(id) on delete cascade,
-                                    role_id integer references expedix.roles(id) on delete cascade,
-                                    primary key (user_id, role_id)
+create table expedix.user_roles
+(
+    user_id integer references expedix.users (id) on delete cascade,
+    role_id integer references expedix.roles (id) on delete cascade,
+    primary key (user_id, role_id)
 );

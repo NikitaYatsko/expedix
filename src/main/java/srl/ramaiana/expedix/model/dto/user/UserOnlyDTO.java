@@ -14,5 +14,4 @@ public class UserOnlyDTO {
     private String email;
     private List<RoleDTO> roleList;
     private Boolean isDeleted;
-
 }

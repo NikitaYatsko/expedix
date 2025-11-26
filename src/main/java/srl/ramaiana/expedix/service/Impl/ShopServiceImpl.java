@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.ShopMapper;
 import srl.ramaiana.expedix.model.dto.shop.ShopDTO;
+import srl.ramaiana.expedix.model.entity.Settlement;
 import srl.ramaiana.expedix.model.entity.Shop;
 import srl.ramaiana.expedix.model.request.shop.ShopRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
+import srl.ramaiana.expedix.repository.SettlementRepository;
 import srl.ramaiana.expedix.repository.ShopRepository;
 import srl.ramaiana.expedix.service.ShopService;
 
@@ -21,6 +23,7 @@ public class ShopServiceImpl implements ShopService {
 
     private final ShopRepository shopRepository;
     private final ShopMapper shopMapper;
+    private final SettlementRepository settlementRepository;
 
     @Override
     public ShopDTO getShopById(@NotNull Integer shopId) {
@@ -28,10 +31,15 @@ public class ShopServiceImpl implements ShopService {
                 () -> new DataNotFoundException("Shop not found"));
         return shopMapper.toDto(shop);
     }
+
     @Transactional
     @Override
     public ShopDTO createShop(@NotNull ShopRequest shopRequest) {
+        Settlement settlement = settlementRepository.findById(shopRequest.getSettlementId()).orElseThrow(
+                () -> new DataNotFoundException("Settlement not found")
+        );
         Shop shop = shopMapper.toEntity(shopRequest);
+        shop.setSettlement(settlement);
         shopRepository.save(shop);
         return shopMapper.toDto(shop);
     }
@@ -45,6 +53,7 @@ public class ShopServiceImpl implements ShopService {
         shop.setName(shopRequest.getName());
         return shopMapper.toDto(shop);
     }
+
     @Transactional
     @Override
     public void deleteShopById(Integer shopId) {
@@ -68,9 +77,5 @@ public class ShopServiceImpl implements ShopService {
                         shops.getTotalPages()
                 )
         );
-
     }
-
-
-
 }
