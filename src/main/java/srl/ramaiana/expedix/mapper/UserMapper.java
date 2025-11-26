@@ -3,7 +3,6 @@ package srl.ramaiana.expedix.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
-import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.dto.user.UserProfileDTO;
 import srl.ramaiana.expedix.model.entity.User;
 
@@ -25,6 +24,7 @@ public class UserMapper {
         }
 
         UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(user.getId());
         userDTO.setEmail(user.getEmail());
         userDTO.setFullName(user.getFullName());
         userDTO.setPersonalCode(user.getPersonalCode());

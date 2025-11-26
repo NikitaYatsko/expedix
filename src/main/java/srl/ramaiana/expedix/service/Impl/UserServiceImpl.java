@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
-import srl.ramaiana.expedix.model.dto.user.UserOnlyDTO;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
@@ -19,6 +18,7 @@ import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.service.UserService;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -72,21 +72,6 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    @Override
-    public PaginationResponse<UserOnlyDTO> getOnlyUsers(Pageable pageable) {
-        Page<User> users = userRepository.findUsersOnly(pageable);
-        Page<UserOnlyDTO> dto = users.map(userMapper::toUserOnlyDTO);
-
-        return new PaginationResponse<>(
-                dto.getContent(),
-                new PaginationResponse.Pagination(
-                        dto.getTotalElements(),
-                        pageable.getPageSize(),
-                        dto.getNumber() + 1,
-                        dto.getTotalPages()
-                )
-        );
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
