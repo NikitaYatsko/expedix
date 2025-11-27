@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
@@ -22,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
     private final OrderService orderService;
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Integer id) {

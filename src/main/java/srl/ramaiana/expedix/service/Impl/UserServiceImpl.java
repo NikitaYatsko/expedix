@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +15,7 @@ import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.model.entity.User;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.mapper.UserMapper;
+import srl.ramaiana.expedix.model.entity.enums.RolesEnum;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.UserRepository;
@@ -56,6 +58,7 @@ public class UserServiceImpl implements UserService {
         user.setIsDeleted(true);
     }
 
+    @PreAuthorize("hasRole('DIRECTOR')")
     @Override
     public PaginationResponse<UserDTO> getAllUsers(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
@@ -85,9 +88,12 @@ public class UserServiceImpl implements UserService {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList())
+                user.getRoles()
+                        .stream()
+                        .map(role -> new SimpleGrantedAuthority(
+                                RolesEnum.fromRole(role.getName()).getAuthority()
+                        ))
+                        .collect(Collectors.toList())
         );
-
-
     }
 }

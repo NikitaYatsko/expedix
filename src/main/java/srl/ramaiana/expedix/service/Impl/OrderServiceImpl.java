@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.OrderMapper;
@@ -30,24 +31,22 @@ public class OrderServiceImpl implements OrderService {
     private final SettlementRepository settlementRepository;
     private final ShopRepository shopRepository;
     private final ProductRepository productRepository;
-    private final AccessValidator accessValidator;
 
 
+    @PreAuthorize("hasRole('DIRECTOR')")
     @Override
     public OrderDTO getOrderById(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Order not found with id " + id)
         );
-        accessValidator.validateDirectorOrOwnerAccess(order.getUser().getEmail());
         return orderMapper.toOrderDto(order);
     }
 
-
+    @PreAuthorize("hasRole('DIRECTOR')")
     @Override
     public PaginationResponse<OrderDTO> getOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
         Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
-        accessValidator.validateProductReadAccess();
         return new PaginationResponse<>(
                 dtos.getContent(),
                 new PaginationResponse.Pagination(
@@ -114,11 +113,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
+    @PreAuthorize("hasAnyRole('DIRECTOR','AGENT','OPERATOR','FORWARDER')")
     public OrderDTO updateOrder(Long id, UpdateOrderDTO request) {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Order not found with id " + id)
         );
-        accessValidator.validateDirectorOrOwnerAccess(order.getUser().getEmail());
         if (request.getStatus() != null) {
             order.setOrderStatus(request.getStatus());
         }
@@ -128,12 +127,12 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toOrderDto(order);
     }
 
+    @PreAuthorize("hasRole('DIRECTOR') or @userService.getUserIdByEmail(authentication.principal.username) == #userId")
     @Override
     public PaginationResponse<OrderDTO> findAllByUser(Integer userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new DataNotFoundException("User not found with id " + userId)
         );
-        accessValidator.validateDirectorOrOwnerAccess(user.getEmail());
         Page<Order> orders = orderRepository.findAllByUser(user, pageable);
         Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
 

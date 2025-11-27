@@ -14,9 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import srl.ramaiana.expedix.constants.ApiErrorMessage;
+import srl.ramaiana.expedix.model.entity.enums.RolesEnum;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String REGISTER_PATH = "/auth/register";
 
     private final JwtTokenProvider jwtTokenProvider;
+
 
     @Override
     protected void doFilterInternal(
@@ -55,8 +58,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 emailOpt.ifPresent(email -> {
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
                         List<SimpleGrantedAuthority> authorities = jwtTokenProvider.getRoles(jwt).stream()
-                                .map(SimpleGrantedAuthority::new)
+                                .map(role -> {
+                                    RolesEnum roleEnum = RolesEnum.fromRole(role);
+                                    return new SimpleGrantedAuthority("ROLE_" + roleEnum.name());
+                                })
                                 .collect(Collectors.toList());
+
+                        System.out.println("=== DEBUG JWT FILTER ===");
+                        System.out.println("Username: " + email);
+                        System.out.println("Roles from token: " + jwtTokenProvider.getRoles(jwt));
+                        System.out.println("Authorities created: " + authorities);
+                        System.out.println("=========================");
 
                         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                                 email,
@@ -66,6 +78,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     }
                 });
+
 
             } catch (ExpiredJwtException e) {
                 handleTokenExpiration(requestURI, jwt, response);

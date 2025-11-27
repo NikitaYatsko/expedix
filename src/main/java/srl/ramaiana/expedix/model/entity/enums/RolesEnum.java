@@ -17,6 +17,10 @@ public enum RolesEnum {
 
     private final String role;
 
+    public String getAuthority() {
+        return "ROLE_" + this.name();
+    }
+
     public static RolesEnum fromRole(String role) {
         return Arrays.stream(RolesEnum.values())
                 .filter(r -> r.getRole().equalsIgnoreCase(role))

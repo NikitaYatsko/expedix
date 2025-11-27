@@ -8,6 +8,7 @@ import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.exceptions.InvalidPasswordException;
 import srl.ramaiana.expedix.model.entity.User;
+import srl.ramaiana.expedix.model.entity.enums.RolesEnum;
 import srl.ramaiana.expedix.repository.UserRepository;
 import srl.ramaiana.expedix.utils.ApiUtils;
 import srl.ramaiana.expedix.utils.PasswordUtils;
@@ -40,29 +41,42 @@ public class AccessValidator {
         User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
         );
-        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Директор"));
+        return user.getRoles().stream()
+                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.DIRECTOR);
     }
 
     public boolean isOperator(String email) {
         User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
         );
-        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Оператор"));
+        return user.getRoles().stream()
+                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.OPERATOR);
     }
 
     public boolean isAgent(String email) {
         User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
         );
-        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Агент"));
+        return user.getRoles().stream()
+                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.AGENT);
     }
 
     public boolean isForwarder(String email) {
         User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
         );
-        return user.getRoles().stream().anyMatch(role -> role.getName().equals("Экспедитор"));
+        return user.getRoles().stream()
+                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.FORWARDER);
     }
+
+    public boolean hasRole(String email, RolesEnum roleEnum) {
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
+        );
+        return user.getRoles().stream()
+                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == roleEnum);
+    }
+
 
 
     @SneakyThrows
