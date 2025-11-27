@@ -17,4 +17,6 @@ public interface UserService extends UserDetailsService {
 
     PaginationResponse<UserDTO> getAllUsers(Pageable pageable);
 
+    UserDTO getCurrentUser(String email);
+
 }

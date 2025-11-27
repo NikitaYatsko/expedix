@@ -9,10 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.constants.ApiErrorMessage;
-import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.exceptions.InvalidDataException;
-import srl.ramaiana.expedix.exceptions.InvalidPasswordException;
 import srl.ramaiana.expedix.mapper.UserMapper;
 import srl.ramaiana.expedix.model.entity.Role;
 import srl.ramaiana.expedix.model.entity.enums.RolesEnum;

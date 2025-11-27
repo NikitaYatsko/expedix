@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -58,7 +57,6 @@ public class UserServiceImpl implements UserService {
         user.setIsDeleted(true);
     }
 
-    @PreAuthorize("hasRole('DIRECTOR')")
     @Override
     public PaginationResponse<UserDTO> getAllUsers(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
@@ -73,6 +71,15 @@ public class UserServiceImpl implements UserService {
                         dto.getTotalPages()
                 )
         );
+    }
+
+    @Override
+    public UserDTO getCurrentUser(String email) {
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
+                () -> new DataNotFoundException("User not found!")
+        );
+        return userMapper.toDto(user);
+
     }
 
 

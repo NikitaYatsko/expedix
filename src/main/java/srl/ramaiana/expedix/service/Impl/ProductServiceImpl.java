@@ -3,7 +3,6 @@ package srl.ramaiana.expedix.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.mapper.ProductMapper;
 import srl.ramaiana.expedix.model.dto.product.ProductDTO;
@@ -20,10 +19,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    @PreAuthorize("hasAnyRole('DIRECTOR','AGENT','OPERATOR','FORWARDER')")
     @Override
     public PaginationResponse<ProductDTO> findAllProduct(Pageable pageable) {
-
         Page<Product> products = productRepository.findAll(pageable);
         Page<ProductDTO> dtos = products.map(productMapper::toDto);
 

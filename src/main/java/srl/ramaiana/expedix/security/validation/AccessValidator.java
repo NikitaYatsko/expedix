@@ -45,39 +45,6 @@ public class AccessValidator {
                 .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.DIRECTOR);
     }
 
-    public boolean isOperator(String email) {
-        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
-                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
-        );
-        return user.getRoles().stream()
-                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.OPERATOR);
-    }
-
-    public boolean isAgent(String email) {
-        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
-                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
-        );
-        return user.getRoles().stream()
-                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.AGENT);
-    }
-
-    public boolean isForwarder(String email) {
-        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
-                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
-        );
-        return user.getRoles().stream()
-                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == RolesEnum.FORWARDER);
-    }
-
-    public boolean hasRole(String email, RolesEnum roleEnum) {
-        User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
-                () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email))
-        );
-        return user.getRoles().stream()
-                .anyMatch(role -> RolesEnum.fromRole(role.getName()) == roleEnum);
-    }
-
-
 
     @SneakyThrows
     public void validateDirectorOrOwnerAccess(String email) {
@@ -89,17 +56,6 @@ public class AccessValidator {
         }
     }
 
-    @SneakyThrows
-    public void validateProductReadAccess() {
-        String currentEmail = ApiUtils.getCurrentUsername();
-
-        if (isDirector(currentEmail)) return;
-        if (isOperator(currentEmail)) return;
-        if (isForwarder(currentEmail)) return;
-        if (isAgent(currentEmail)) return;
-
-        throw new AccessDeniedException("Нет доступа!");
-    }
 
 
 }
