@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.service.UserService;
 
-
 import java.security.Principal;
 @RequiredArgsConstructor
 @RestController

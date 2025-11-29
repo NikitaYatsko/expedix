@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.OrderMapper;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
@@ -36,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO getOrderById(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("Order not found with id " + id)
+                () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
         );
         return orderMapper.toOrderDto(order);
     }
@@ -61,13 +62,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO createOrder(String username, NewOrderRequest request) {
         User user = userRepository.findUserByEmailAndIsDeletedFalse(username).orElseThrow(
-                () -> new DataNotFoundException("User not found with name " + username)
+                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
         );
         Settlement settlement = settlementRepository.findById(request.getSettlementId()).orElseThrow(
-                () -> new DataNotFoundException("Settlement not found with id " + request.getSettlementId())
+                () -> new DataNotFoundException(ApiErrorMessage.SETTLEMENT_NOT_FOUND.getMessage())
         );
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(request.getShopId()).orElseThrow(
-                () -> new DataNotFoundException("Shop not found with id " + request.getShopId())
+                () -> new DataNotFoundException(ApiErrorMessage.SHOP_NOT_FOUND.getMessage())
         );
 
         Order order = new Order();
@@ -92,11 +93,11 @@ public class OrderServiceImpl implements OrderService {
 
             Product product = productMap.get(itemRequest.getProductId());
             if (product == null) {
-                throw new DataNotFoundException("Product not found with id " + itemRequest.getProductId());
+                throw new DataNotFoundException(ApiErrorMessage.PRODUCT_NOT_FOUND.getMessage());
             }
 
             if (product.getQuantityInStock() < itemRequest.getQuantity()) {
-                throw new DataNotFoundException("Product not enough stock");
+                throw new DataNotFoundException(ApiErrorMessage.PRODUCT_NOT_ENOUGH_STOCK.getMessage());
             }
 
             order.addOrderItem(product, itemRequest.getQuantity());
@@ -114,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO updateOrder(Long id, UpdateOrderDTO request) {
         Order order = orderRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("Order not found with id " + id)
+                () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
         );
         if (request.getStatus() != null) {
             order.setOrderStatus(request.getStatus());
@@ -129,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PaginationResponse<OrderDTO> findAllByUser(Integer userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new DataNotFoundException("User not found with id " + userId)
+                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
         );
         accessValidator.validateDirectorOrOwnerAccess(user.getEmail());
         Page<Order> orders = orderRepository.findAllByUser(user, pageable);

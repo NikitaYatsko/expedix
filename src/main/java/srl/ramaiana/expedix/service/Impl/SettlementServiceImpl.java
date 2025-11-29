@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataExistsException;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.SettlementMapper;
@@ -27,7 +28,7 @@ public class SettlementServiceImpl implements SettlementService {
     @Override
     public SettlementDTO getSettlementById(Integer id) {
         Settlement settlement = settlementRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("settlement with id " + id + " not found")
+                () -> new DataNotFoundException(ApiErrorMessage.SETTLEMENT_NOT_FOUND.getMessage())
         );
         return settlementMapper.toDto(settlement);
     }
@@ -36,7 +37,7 @@ public class SettlementServiceImpl implements SettlementService {
     @Override
     public SettlementDTO createSettlement(@NotNull NewSettlementRequest settlementRequest) {
         if (settlementRepository.existsByName(settlementRequest.getName())) {
-            throw new DataExistsException("settlement with name " + settlementRequest.getName() + " already exists");
+            throw new DataExistsException(ApiErrorMessage.SETTLEMENT_ALREADY_EXISTS.getMessage());
         }
 
         Settlement settlement = settlementMapper.toEntity(settlementRequest);
@@ -48,7 +49,7 @@ public class SettlementServiceImpl implements SettlementService {
     @Override
     public SettlementDTO updateSettlement(@NotNull Integer id, @NotNull UpdateSettlementRequest settlementRequest) {
         Settlement settlement = settlementRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("Settlement with id " + id + " not found"));
+                .orElseThrow(() -> new DataNotFoundException(ApiErrorMessage.SETTLEMENT_NOT_FOUND.getMessage()));
 
         Settlement settlementToSave = settlementMapper.updateSettlement(settlementRequest, settlement);
         Settlement savedSettlement = settlementRepository.save(settlementToSave);

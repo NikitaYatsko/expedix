@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
 import srl.ramaiana.expedix.mapper.ShopMapper;
 import srl.ramaiana.expedix.model.dto.shop.ShopDTO;
@@ -28,7 +29,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopDTO getShopById(@NotNull Integer shopId) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
-                () -> new DataNotFoundException("Shop not found"));
+                () -> new DataNotFoundException(ApiErrorMessage.SHOP_NOT_FOUND.getMessage()));
         return shopMapper.toDto(shop);
     }
 
@@ -36,7 +37,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopDTO createShop(@NotNull ShopRequest shopRequest) {
         Settlement settlement = settlementRepository.findById(shopRequest.getSettlementId()).orElseThrow(
-                () -> new DataNotFoundException("Settlement not found")
+                () -> new DataNotFoundException(ApiErrorMessage.SETTLEMENT_NOT_FOUND.getMessage())
         );
         Shop shop = shopMapper.toEntity(shopRequest);
         shop.setSettlement(settlement);
@@ -48,7 +49,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public ShopDTO updateShopById(@NotNull Integer shopId, @NotNull ShopRequest shopRequest) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
-                () -> new DataNotFoundException("Shop not found"));
+                () -> new DataNotFoundException(ApiErrorMessage.SHOP_NOT_FOUND.getMessage()));
         shop.setAddress(shopRequest.getAddress());
         shop.setName(shopRequest.getName());
         return shopMapper.toDto(shop);
@@ -58,7 +59,7 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public void deleteShopById(Integer shopId) {
         Shop shop = shopRepository.findByIdAndIsDeletedFalse(shopId).orElseThrow(
-                () -> new DataNotFoundException("Shop not found"));
+                () -> new DataNotFoundException(ApiErrorMessage.SHOP_NOT_FOUND.getMessage()));
         shop.setIsDeleted(true);
 
     }

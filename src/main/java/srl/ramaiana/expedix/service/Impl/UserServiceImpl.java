@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findUserById(@NotNull Integer userId) {
         User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
-                () -> new DataNotFoundException("User not found!")
+                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
         );
         return userMapper.toDto(user);
     }
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(@NotNull Integer userId, @NotNull UpdateUserRequest request) {
         User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
-                () -> new DataNotFoundException("User not found!")
+                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
         );
         userMapper.updateUserFromRequest(request, user);
         return userMapper.toDto(user);
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Integer userId) {
         User user = userRepository.findByIdAndIsDeletedFalse(userId).orElseThrow(
-                () -> new DataNotFoundException("User not found!")
+                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
         );
         user.setIsDeleted(true);
     }
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getCurrentUser(String email) {
         User user = userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(
-                () -> new DataNotFoundException("User not found!")
+                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
         );
         return userMapper.toDto(user);
 
