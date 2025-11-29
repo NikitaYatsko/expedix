@@ -61,7 +61,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/me/**").authenticated()
 
                         // Everything else
-                        .anyRequest().denyAll()
+                        .anyRequest().permitAll()
                 )
 
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
