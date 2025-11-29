@@ -3,6 +3,7 @@ package srl.ramaiana.expedix.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,18 +32,38 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authz -> authz
+                .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
-                        .requestMatchers("/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER", "AGENT")
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/settlements/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/shops/**").permitAll()
 
-                        .requestMatchers("/api/products/**").hasAnyRole("DIRECTOR", "AGENT", "OPERATOR", "FORWARDER")
+                        // Orders
+                        .requestMatchers(HttpMethod.POST, "/api/orders/**")
+                        .hasAnyRole("DIRECTOR", "OPERATOR", "AGENT")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/all")
+                        .hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
+                        .requestMatchers(HttpMethod.PUT, "/api/orders/**")
+                        .hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
+                        .requestMatchers(HttpMethod.PATCH, "/api/orders/**")
+                        .hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
 
-                        .requestMatchers("/api/users/**").hasRole("DIRECTOR")
+                        // Users
+                        .requestMatchers("/api/users/**")
+                        .hasAnyRole("DIRECTOR", "OPERATOR")
+
+                        // Settlements, shops
+                        .requestMatchers(HttpMethod.POST, "/api/settlements/**")
+                        .hasAnyRole("DIRECTOR", "OPERATOR")
+
+                        // Profile
                         .requestMatchers("/api/me/**").authenticated()
 
-                        .anyRequest().authenticated()
+                        // Everything else
+                        .anyRequest().denyAll()
                 )
+
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
