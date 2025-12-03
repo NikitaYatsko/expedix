@@ -60,7 +60,6 @@ public class SecurityConfig {
                         // Profile
                         .requestMatchers("/api/me/**").authenticated()
 
-                        // Everything else
                         .anyRequest().permitAll()
                 )
 
