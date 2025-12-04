@@ -45,14 +45,13 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getMyOrder(
             @PathVariable Long id
     ) {
-        String currentEmail = ApiUtils.getCurrentUsername();
-        return ResponseEntity.ok(orderService.getOrderByIdAndCheckOwner(id, currentEmail));
+
+        return ResponseEntity.ok(orderService.getMyOrderById(id));
     }
 
     @PutMapping("/me/{id}")
     public ResponseEntity<OrderDTO> updateMyOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderDTO request) {
-        String currentEmail = ApiUtils.getCurrentUsername();
-        return ResponseEntity.ok(orderService.updateOrderByOwner(id, currentEmail, request));
+        return ResponseEntity.ok(orderService.updateOrder(id,request));
 
     }
 

@@ -44,26 +44,16 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toOrderDto(order);
     }
 
-    public OrderDTO getOrderByIdAndCheckOwner(Long orderId, String email) {
+    public OrderDTO getMyOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new DataNotFoundException("Order not found"));
+        String email = order.getUser().getEmail();
 
         accessValidator.validateDirectorOrOwnerAccess(email);
         return orderMapper.toOrderDto(order);
     }
 
-    public OrderDTO updateOrderByOwner(Long orderId, String email, UpdateOrderDTO request) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
-                () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
-        );
-        accessValidator.validateDirectorOrOwnerAccess(email);
-        if (request.getStatus() != null) {
-            order.setOrderStatus(request.getStatus());
-        }
 
-        return getOrderDTO(request, order);
-
-    }
 
     private OrderDTO getOrderDTO(UpdateOrderDTO request, Order order) {
         if (request.getComment() != null && !request.getComment().isBlank()) {
@@ -154,10 +144,7 @@ public class OrderServiceImpl implements OrderService {
 
         String currentEmail = ApiUtils.getCurrentUsername();
 
-        if (order.getUser() == null ||
-                (!order.getUser().getEmail().equalsIgnoreCase(currentEmail) && !accessValidator.isDirector(currentEmail))) {
-            throw new AccessDeniedException("You cannot modify this order");
-        }
+        accessValidator.validateDirectorOrOwnerAccess(currentEmail);
 
         if (request.getStatus() != null) {
             order.setOrderStatus(request.getStatus());
@@ -165,7 +152,6 @@ public class OrderServiceImpl implements OrderService {
 
         return getOrderDTO(request, order);
     }
-
 
 
     @Override
