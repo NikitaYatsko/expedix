@@ -46,7 +46,7 @@ public class OrderController {
             @PathVariable Long id
     ) {
 
-        return ResponseEntity.ok(orderService.getMyOrderById(id));
+        return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
     @PutMapping("/me/{id}")

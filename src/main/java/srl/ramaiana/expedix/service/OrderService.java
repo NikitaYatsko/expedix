@@ -19,7 +19,6 @@ public interface OrderService {
 
     OrderDTO updateOrder(@NotNull Long id, @NotNull UpdateOrderDTO request);
 
-    OrderDTO getMyOrderById(Long orderId);
 
     PaginationResponse<OrderDTO> findAllByUser(@NotNull String email, Pageable pageable);
 }

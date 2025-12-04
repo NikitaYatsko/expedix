@@ -41,18 +41,10 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
         );
-        return orderMapper.toOrderDto(order);
-    }
-
-    public OrderDTO getMyOrderById(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new DataNotFoundException("Order not found"));
         String email = order.getUser().getEmail();
-
         accessValidator.validateDirectorOrOwnerAccess(email);
         return orderMapper.toOrderDto(order);
     }
-
 
 
     private OrderDTO getOrderDTO(UpdateOrderDTO request, Order order) {
