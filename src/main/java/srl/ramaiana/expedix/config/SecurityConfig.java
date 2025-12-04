@@ -41,18 +41,24 @@ public class SecurityConfig {
                         .requestMatchers("/api/orders/me").hasRole("AGENT")
                         .requestMatchers("/api/orders/me/{id}").hasRole("AGENT")
                         .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("AGENT")
-                        .requestMatchers(HttpMethod.PUT, "/api/orders/me/**").hasRole("AGENT")
                         .requestMatchers(HttpMethod.POST, "/api/shops").hasRole("AGENT")
+                        .requestMatchers(HttpMethod.PUT, "/api/shops").hasRole("AGENT")
                         .requestMatchers(HttpMethod.DELETE, "/api/shops/**").denyAll() // агенты не могут удалять
 
                         // DIRECTOR и OPERATOR на заказы
                         .requestMatchers("/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR")
                         .requestMatchers(HttpMethod.GET, "/api/orders/user/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("DIRECTOR", "OPERATOR")
                         .requestMatchers(HttpMethod.GET, "/api/orders/all").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
                         .requestMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
 
                         // DIRECTOR и OPERATOR на settlements
-                        .requestMatchers("/api/settlements/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.POST, "/api/settlements/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.DELETE, "/api/settlements/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/settlements/**").hasAnyRole("DIRECTOR", "OPERATOR")
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/shops/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.PUT, "/api/shops/**").hasAnyRole("DIRECTOR", "OPERATOR")
 
                         // Profile
                         .requestMatchers("/profile").authenticated()
