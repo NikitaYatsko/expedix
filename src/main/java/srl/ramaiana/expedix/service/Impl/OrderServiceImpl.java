@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import srl.ramaiana.expedix.constants.ApiErrorMessage;
 import srl.ramaiana.expedix.exceptions.DataNotFoundException;
@@ -16,6 +17,7 @@ import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.repository.*;
 import srl.ramaiana.expedix.security.validation.AccessValidator;
 import srl.ramaiana.expedix.service.OrderService;
+import srl.ramaiana.expedix.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +41,38 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
         );
+        return orderMapper.toOrderDto(order);
+    }
+
+    public OrderDTO getOrderByIdAndCheckOwner(Long orderId, String email) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new DataNotFoundException("Order not found"));
+
+        accessValidator.validateDirectorOrOwnerAccess(email);
+        return orderMapper.toOrderDto(order);
+    }
+
+    public OrderDTO updateOrderByOwner(Long orderId, String email, UpdateOrderDTO request) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+                () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
+        );
+        accessValidator.validateDirectorOrOwnerAccess(email);
+        if (request.getStatus() != null) {
+            order.setOrderStatus(request.getStatus());
+        }
+
+        return getOrderDTO(request, order);
+
+    }
+
+    private OrderDTO getOrderDTO(UpdateOrderDTO request, Order order) {
+        if (request.getComment() != null && !request.getComment().isBlank()) {
+            String oldComment = order.getComment() != null ? order.getComment() : "";
+            String newComment = oldComment.isEmpty() ? request.getComment() : oldComment + ", " + request.getComment();
+            order.setComment(newComment);
+        }
+
+        orderRepository.save(order);
         return orderMapper.toOrderDto(order);
     }
 
@@ -117,23 +151,46 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.ORDER_NOT_FOUND.getMessage())
         );
+
+        String currentEmail = ApiUtils.getCurrentUsername();
+
+        if (order.getUser() == null ||
+                (!order.getUser().getEmail().equalsIgnoreCase(currentEmail) && !accessValidator.isDirector(currentEmail))) {
+            throw new AccessDeniedException("You cannot modify this order");
+        }
+
         if (request.getStatus() != null) {
             order.setOrderStatus(request.getStatus());
         }
-        if (request.getComment() != null) {
-            order.setComment(order.getComment() + ", " + request.getComment());
-        }
-        return orderMapper.toOrderDto(order);
+
+        return getOrderDTO(request, order);
     }
 
 
+
     @Override
-    public PaginationResponse<OrderDTO> findAllByUser(Integer userId, Pageable pageable) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new DataNotFoundException(ApiErrorMessage.USER_NOT_FOUND.getMessage())
-        );
-        accessValidator.validateDirectorOrOwnerAccess(user.getEmail());
-        Page<Order> orders = orderRepository.findAllByUser(user, pageable);
+    public PaginationResponse<OrderDTO> findAllByUser(String email, Pageable pageable) {
+
+        String currentEmail = ApiUtils.getCurrentUsername();
+        User currentUser = userRepository.findUserByEmailAndIsDeletedFalse(currentEmail)
+                .orElseThrow(() -> new DataNotFoundException(
+                        ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(currentEmail)));
+
+        Page<Order> orders;
+
+        if (accessValidator.isDirector(currentEmail)) {
+            User user = userRepository.findUserByEmailAndIsDeletedFalse(email)
+                    .orElseThrow(() -> new DataNotFoundException(
+                            ApiErrorMessage.EMAIL_NOT_FOUND.getMessage(email)));
+            orders = orderRepository.findAllByUser(user, pageable);
+        } else {
+            orders = orderRepository.findAllByUser(currentUser, pageable);
+
+            if (!currentEmail.equals(email)) {
+                throw new AccessDeniedException(ApiErrorMessage.ACCESS_DENIED.getMessage());
+            }
+        }
+
         Page<OrderDTO> dtos = orders.map(orderMapper::toOrderDto);
 
         return new PaginationResponse<>(
@@ -145,6 +202,7 @@ public class OrderServiceImpl implements OrderService {
                         dtos.getTotalPages()
                 )
         );
-
     }
+
+
 }

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 
+import srl.ramaiana.expedix.model.entity.Order;
 import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
@@ -18,5 +19,9 @@ public interface OrderService {
 
     OrderDTO updateOrder(@NotNull Long id, @NotNull UpdateOrderDTO request);
 
-    PaginationResponse<OrderDTO> findAllByUser(@NotNull Integer userId, Pageable pageable);
+    OrderDTO getOrderByIdAndCheckOwner(Long orderId, String email);
+
+    OrderDTO updateOrderByOwner(Long orderId, String email, UpdateOrderDTO request);
+
+    PaginationResponse<OrderDTO> findAllByUser(@NotNull String email, Pageable pageable);
 }

@@ -33,34 +33,37 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+
+                        // Auth
                         .requestMatchers("/auth/**").permitAll()
+
+                        // AGENT
+                        .requestMatchers("/api/orders/me").hasRole("AGENT")
+                        .requestMatchers("/api/orders/me/{id}").hasRole("AGENT")
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("AGENT")
+                        .requestMatchers(HttpMethod.PUT, "/api/orders/me/**").hasRole("AGENT")
+                        .requestMatchers(HttpMethod.POST, "/api/shops").hasRole("AGENT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/shops/**").denyAll() // агенты не могут удалять
+
+                        // DIRECTOR и OPERATOR на заказы
+                        .requestMatchers("/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/user/**").hasAnyRole("DIRECTOR", "OPERATOR")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/all").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
+                        .requestMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
+
+                        // DIRECTOR и OPERATOR на settlements
+                        .requestMatchers("/api/settlements/**").hasAnyRole("DIRECTOR", "OPERATOR")
+
+                        // Profile
+                        .requestMatchers("/profile").authenticated()
+
+                        // Публичные GET
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/settlements/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/shops/**").permitAll()
 
-                        // Orders
-                        .requestMatchers(HttpMethod.POST, "/api/orders/**")
-                        .hasAnyRole("DIRECTOR", "OPERATOR", "AGENT")
-                        .requestMatchers(HttpMethod.GET, "/api/orders/all")
-                        .hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
-                        .requestMatchers(HttpMethod.PUT, "/api/orders/**")
-                        .hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
-                        .requestMatchers(HttpMethod.PATCH, "/api/orders/**")
-                        .hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
-
-                        // Users
-                        .requestMatchers("/api/users/**")
-                        .hasAnyRole("DIRECTOR", "OPERATOR")
-
-                        // Settlements, shops
-                        .requestMatchers(HttpMethod.POST, "/api/settlements/**")
-                        .hasAnyRole("DIRECTOR", "OPERATOR")
-
-                        // Profile
-                        .requestMatchers("/api/me/**").authenticated()
-
-                        .anyRequest().permitAll()
+                        // Всё остальное запрещено
+                        .anyRequest().denyAll()
                 )
 
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

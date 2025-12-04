@@ -18,6 +18,7 @@ import srl.ramaiana.expedix.model.request.order.NewOrderRequest;
 import srl.ramaiana.expedix.model.request.order.UpdateOrderDTO;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
 import srl.ramaiana.expedix.service.OrderService;
+import srl.ramaiana.expedix.utils.ApiUtils;
 
 import java.security.Principal;
 
@@ -29,6 +30,42 @@ import java.security.Principal;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @GetMapping("/me")
+    public ResponseEntity<PaginationResponse<OrderDTO>> getMyOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        String currentEmail = ApiUtils.getCurrentUsername();
+        return ResponseEntity.ok(orderService.findAllByUser(currentEmail, pageable));
+    }
+
+    @GetMapping("/me/{id}")
+    public ResponseEntity<OrderDTO> getMyOrder(
+            @PathVariable Long id
+    ) {
+        String currentEmail = ApiUtils.getCurrentUsername();
+        return ResponseEntity.ok(orderService.getOrderByIdAndCheckOwner(id, currentEmail));
+    }
+
+    @PutMapping("/me/{id}")
+    public ResponseEntity<OrderDTO> updateMyOrder(@PathVariable Long id, @Valid @RequestBody UpdateOrderDTO request) {
+        String currentEmail = ApiUtils.getCurrentUsername();
+        return ResponseEntity.ok(orderService.updateOrderByOwner(id, currentEmail, request));
+
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByUser(
+            @RequestParam String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(orderService.findAllByUser(email, pageable));
+    }
+
 
     @Operation(
             summary = "Получить заказ по ID",

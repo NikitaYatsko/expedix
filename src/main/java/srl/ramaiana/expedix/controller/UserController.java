@@ -7,11 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import srl.ramaiana.expedix.model.dto.order.OrderDTO;
 import srl.ramaiana.expedix.model.dto.user.UserDTO;
 import srl.ramaiana.expedix.model.request.user.UpdateUserRequest;
 import srl.ramaiana.expedix.model.response.PaginationResponse;
-import srl.ramaiana.expedix.service.OrderService;
 import srl.ramaiana.expedix.service.UserService;
 
 @Slf4j
@@ -21,7 +19,6 @@ import srl.ramaiana.expedix.service.UserService;
 public class UserController {
 
     private final UserService userService;
-    private final OrderService orderService;
 
 
     @GetMapping("/{id}")
@@ -42,15 +39,15 @@ public class UserController {
     }
 
 
-    @GetMapping("/{userId}/orders")
+    /*@GetMapping("/{userId}/orders")
     public ResponseEntity<PaginationResponse<OrderDTO>> getOrdersByUser(
-            @PathVariable Integer userId,
+            @PathVariable String email,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(orderService.findAllByUser(userId, pageable));
-    }
+        return ResponseEntity.ok(orderService.findAllByUser(email, pageable));
+    }*/
 
 
     @PutMapping("/{id}")
