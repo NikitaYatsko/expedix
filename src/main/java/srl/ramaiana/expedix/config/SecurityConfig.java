@@ -31,6 +31,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
@@ -40,7 +41,7 @@ public class SecurityConfig {
                         // AGENT
                         .requestMatchers("/api/orders/me").hasRole("AGENT")
                         .requestMatchers("/api/orders/me/{id}").hasRole("AGENT")
-                        .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("AGENT")
+                        .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyRole("AGENT","USER","DIRECTOR","OPERATOR")
                         .requestMatchers(HttpMethod.POST, "/api/shops").hasRole("AGENT")
                         .requestMatchers(HttpMethod.PUT, "/api/shops").hasRole("AGENT")
                         .requestMatchers(HttpMethod.DELETE, "/api/shops/**").denyAll() // агенты не могут удалять
@@ -49,8 +50,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR")
                         .requestMatchers(HttpMethod.GET, "/api/orders/user/**").hasAnyRole("DIRECTOR", "OPERATOR")
                         .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("DIRECTOR", "OPERATOR")
-                        .requestMatchers(HttpMethod.GET, "/api/orders/all").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
-                        .requestMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER")
+                        .requestMatchers(HttpMethod.GET, "/api/orders/all").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER","USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/orders/**").hasAnyRole("DIRECTOR", "OPERATOR", "FORWARDER","USER")
 
                         // DIRECTOR и OPERATOR на settlements
                         .requestMatchers(HttpMethod.POST, "/api/settlements/**").hasAnyRole("DIRECTOR", "OPERATOR")
@@ -61,12 +62,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/shops/**").hasAnyRole("DIRECTOR", "OPERATOR")
 
                         // Profile
-                        .requestMatchers("/profile").authenticated()
+                        .requestMatchers("/profile/**").authenticated()
 
                         // Публичные GET
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/settlements/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/shops/**").permitAll()
+
 
                         // Всё остальное запрещено
                         .anyRequest().denyAll()

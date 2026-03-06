@@ -92,15 +92,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserByEmail(email).orElseThrow(
                 () -> new DataNotFoundException(ApiErrorMessage.EMAIL_NOT_FOUND.getMessage())
         );
+
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
                 user.getRoles()
                         .stream()
                         .map(role -> new SimpleGrantedAuthority(
-                                RolesEnum.fromRole(role.getName()).getAuthority()
+                                "ROLE_" + role.getName()
                         ))
                         .collect(Collectors.toList())
         );
     }
+
 }

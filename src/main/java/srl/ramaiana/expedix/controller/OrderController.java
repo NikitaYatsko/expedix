@@ -45,7 +45,6 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getMyOrder(
             @PathVariable Long id
     ) {
-
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 

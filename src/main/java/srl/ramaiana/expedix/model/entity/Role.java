@@ -18,7 +18,7 @@ public class Role {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
     @Column(name = "user_system_role", nullable = false, length = 64)
-    @Convert(converter = UserRoleTypeConverter.class)
+
     private RolesEnum userSystemRole;
     @Column(name = "active")
     private Boolean active = true;

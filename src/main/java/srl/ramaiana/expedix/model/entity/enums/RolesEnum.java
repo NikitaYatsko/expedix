@@ -23,9 +23,10 @@ public enum RolesEnum {
 
     public static RolesEnum fromRole(String role) {
         return Arrays.stream(RolesEnum.values())
-                .filter(r -> r.getRole().equalsIgnoreCase(role))
+                .filter(r -> r.name().equalsIgnoreCase(role)) // <-- имя enum, латиница
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Role: " + role));
     }
+
 
 }

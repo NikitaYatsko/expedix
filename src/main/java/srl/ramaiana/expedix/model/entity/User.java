@@ -33,6 +33,7 @@ public class User {
     @Column(name = "email")
     @NotBlank
     private String email;
+    private String imageUrl;
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
     @ManyToMany

@@ -19,7 +19,7 @@ public class ExpedixApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // для всех эндпоинтов
-                        .allowedOrigins("http://localhost:3000") // твой фронтенд
+                        .allowedOrigins("http://localhost:8081") // твой фронтенд
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

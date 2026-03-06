@@ -29,6 +29,7 @@ public class UserMapper {
         userDTO.setFullName(user.getFullName());
         userDTO.setPersonalCode(user.getPersonalCode());
         userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setImageUrl(user.getImageUrl());
         userDTO.setIsDeleted(user.getIsDeleted());
         userDTO.setRoleList(user.getRoles()
                 .stream()
